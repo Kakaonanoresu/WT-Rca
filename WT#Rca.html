@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WT*Rca™</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1825;
+  --paper: #f5f2ed;
+  --mid: #e8e4de;
+  --dim: #b0a898;
+  --accent: #d63031;
+  --green: #00b894;
+  --blue: #0984e3;
+  --yellow: #fdcb6e;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 40px 20px;
+}
+
+/* ─── docs page ─── */
+#docs-page {
+  display: none;
+  width: 100%;
+  max-width: 760px;
+  animation: docsIn 0.4s ease;
+}
+@keyframes docsIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+
+.docs-hero {
+  background: var(--ink);
+  color: white;
+  padding: 40px 40px 32px;
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+.docs-hero::after {
+  content: '';
+  position: absolute;
+  right: -20px; top: -20px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  border: 40px solid rgba(255,255,255,0.04);
+}
+.docs-hero-tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 3px;
+  color: var(--accent); margin-bottom: 10px;
+}
+.docs-hero h1 { font-size: 32px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.5px; }
+.docs-hero p  { font-size: 14px; color: rgba(255,255,255,0.5); }
+
+.docs-body {
+  background: white;
+  border: 1px solid var(--mid);
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.docs-section h2 {
+  font-size: 11px; font-family: var(--mono); letter-spacing: 3px;
+  color: var(--dim); text-transform: uppercase; margin-bottom: 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--mid);
+}
+
+.docs-section p { font-size: 14px; color: #444; line-height: 1.7; margin-bottom: 10px; }
+
+.docs-steps { display: flex; flex-direction: column; gap: 12px; }
+.docs-step {
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.docs-step-num {
+  font-family: var(--mono); font-size: 11px; color: white; background: var(--ink);
+  width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.docs-step-text { font-size: 14px; color: #444; line-height: 1.6; }
+.docs-step-text strong { color: var(--ink); }
+
+.docs-code-wrap {
+  background: var(--ink);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.docs-code-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,0.3);
+  padding: 10px 16px 0;
+}
+.docs-code {
+  font-family: var(--mono); font-size: 12px; color: #a8c0d6;
+  padding: 12px 16px 16px;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.7;
+}
+.docs-code .kw  { color: #74b9ff; }
+.docs-code .str { color: #a8e6cf; }
+.docs-code .cmt { color: rgba(255,255,255,0.25); }
+.docs-code .fn  { color: #ffeaa7; }
+
+.docs-api { display: flex; flex-direction: column; gap: 8px; }
+.docs-api-row {
+  display: flex; gap: 0; border: 1px solid var(--mid); border-radius: 2px; overflow: hidden;
+}
+.docs-api-key {
+  font-family: var(--mono); font-size: 12px; color: var(--ink);
+  background: var(--paper); padding: 8px 14px; min-width: 180px; border-right: 1px solid var(--mid);
+}
+.docs-api-val {
+  font-size: 13px; color: #555; padding: 8px 14px; line-height: 1.5;
+}
+
+.docs-badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.docs-badge {
+  font-family: var(--mono); font-size: 10px; padding: 4px 10px;
+  border-radius: 99px; border: 1px solid var(--mid); color: var(--dim);
+}
+.docs-badge.green { border-color: var(--green); color: var(--green); background: #f0fdf9; }
+
+/* ─── demo page ─── */
+.page-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.demo-card {
+  background: white;
+  border: 1px solid var(--mid);
+  border-radius: 3px;
+  padding: 36px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.demo-card h2 { font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.demo-card .sub { font-size: 13px; color: var(--dim); margin-bottom: 24px; }
+
+.field { margin-bottom: 14px; }
+.field label { display:block; font-size:12px; font-weight:500; color:#555; margin-bottom:5px; letter-spacing:0.3px; }
+.field input { width:100%; padding:9px 12px; border:1px solid var(--mid); border-radius:2px; font-family:var(--sans); font-size:14px; outline:none; color:var(--ink); transition:border-color 0.15s; }
+.field input:focus { border-color: var(--ink); }
+
+.submit { width:100%; padding:11px; background:var(--ink); color:white; border:none; border-radius:2px; font-family:var(--sans); font-size:14px; font-weight:500; cursor:pointer; margin-top:6px; transition:opacity 0.2s; }
+.submit:disabled { opacity:0.35; cursor:not-allowed; }
+.submit:not(:disabled):hover { background:#2d2a3e; }
+
+/* ─── WIDGET ─── */
+.ecw {
+  display:flex; align-items:center; gap:14px;
+  border:1px solid #d8d4ce; border-radius:2px;
+  padding:12px 16px; margin-bottom:14px;
+  cursor:pointer; user-select:none;
+  transition:border-color 0.15s, background 0.15s;
+  background:white; min-height:58px;
+}
+.ecw:hover { border-color:#888; }
+
+.ecw-box {
+  width:24px; height:24px; flex-shrink:0;
+  border:1.5px solid #bbb; border-radius:2px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; background:white; position:relative;
+}
+.ecw-box .spin {
+  width:15px; height:15px; border:2px solid #ddd; border-top-color:var(--ink);
+  border-radius:50%; opacity:0; animation:wSpin 0.6s linear infinite;
+}
+@keyframes wSpin { to { transform:rotate(360deg); } }
+.ecw.loading .ecw-box .spin { opacity:1; }
+.ecw.ok .ecw-box { border-color:var(--green); background:#f0fdf9; }
+.ecw.ok .ecw-box svg { opacity:1; transform:scale(1); }
+.ecw-box svg { opacity:0; transform:scale(0); transition:all 0.25s cubic-bezier(0.175,0.885,0.32,1.6); }
+
+.ecw-text { flex:1; }
+.ecw-text .main { font-size:14px; color:var(--ink); font-weight:400; }
+.ecw-text .sub2 { font-family:var(--mono); font-size:9px; color:var(--dim); margin-top:2px; letter-spacing:0.5px; }
+
+.ecw-badge {
+  display:flex; flex-direction:column; align-items:center; gap:2px; flex-shrink:0;
+}
+.ecw-badge-icon {
+  width:28px; height:28px; background:var(--ink); border-radius:3px;
+  display:flex; align-items:center; justify-content:center;
+}
+.ecw-badge-icon svg { display:block; }
+.ecw-badge-label { font-family:var(--mono); font-size:7px; color:var(--dim); letter-spacing:0.5px; }
+
+/* ─── OVERLAY ─── */
+.eco {
+  position:fixed; inset:0; background:rgba(15,12,25,0.7);
+  z-index:9999; display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity 0.2s;
+  backdrop-filter:blur(6px);
+}
+.eco.open { opacity:1; pointer-events:all; }
+
+/* ─── MODAL ─── */
+.ecm {
+  width:520px; max-width:96vw; max-height:92vh;
+  background:white; border:1px solid var(--mid);
+  border-radius:3px; display:flex; flex-direction:column;
+  transform:translateY(16px) scale(0.98);
+  transition:transform 0.22s cubic-bezier(0.175,0.885,0.32,1.15);
+  overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,0.25);
+}
+.eco.open .ecm { transform:translateY(0) scale(1); }
+
+.ecm-head {
+  padding:14px 18px 12px; border-bottom:1px solid var(--mid);
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0; background:var(--paper);
+}
+.ecm-title h3 { font-family:var(--mono); font-size:9px; letter-spacing:3px; color:var(--accent); font-weight:500; }
+.ecm-title p  { font-size:15px; font-weight:600; color:var(--ink); margin-top:2px; }
+.ecm-meta { display:flex; align-items:center; gap:10px; }
+.ecm-timer { font-family:var(--mono); font-size:22px; color:var(--ink); min-width:34px; text-align:right; }
+.ecm-timer.hot { color:var(--accent); animation:tBlink 0.45s infinite; }
+@keyframes tBlink { 50% { opacity:0.2; } }
+.ecm-close { background:none; border:none; cursor:pointer; color:var(--dim); font-size:18px; line-height:1; padding:4px 6px; transition:color 0.15s; }
+.ecm-close:hover { color:var(--accent); }
+
+/* dots */
+.ecm-dots { display:flex; gap:4px; padding:9px 18px; border-bottom:1px solid var(--mid); flex-wrap:wrap; background:white; }
+.dot { width:9px; height:9px; border-radius:50%; background:var(--mid); transition:all 0.25s; }
+.dot.done { background:var(--green); }
+.dot.now  { background:var(--accent); transform:scale(1.4); }
+
+.ecm-body { padding:18px; flex:1; overflow-y:auto; }
+.ecm-body::-webkit-scrollbar { width:3px; }
+.ecm-body::-webkit-scrollbar-thumb { background:var(--mid); }
+
+/* status */
+.ec-status { display:none; font-family:var(--mono); font-size:10px; padding:7px 10px; margin-bottom:12px; letter-spacing:0.5px; border-radius:1px; }
+.ec-status.err  { display:block; background:#fff5f5; border-left:3px solid var(--accent); color:var(--accent); }
+.ec-status.warn { display:block; background:#fffbf0; border-left:3px solid var(--yellow); color:#a07c00; }
+.ec-status.ok   { display:block; background:#f0fdf9; border-left:3px solid var(--green);  color:var(--green); }
+
+/* challenge */
+.ec-ch { display:none; }
+.ec-ch.active { display:block; }
+
+.ec-q { font-size:13px; color:#444; margin-bottom:14px; line-height:1.7; }
+.ec-q strong { color:var(--ink); font-weight:600; }
+
+/* input */
+.ec-in {
+  width:100%; background:var(--paper); border:1px solid var(--mid);
+  color:var(--ink); font-family:var(--mono); font-size:16px;
+  padding:9px 12px; letter-spacing:4px; outline:none;
+  border-radius:2px; transition:border-color 0.15s; margin-bottom:12px;
+}
+.ec-in:focus { border-color:var(--ink); }
+.ec-in.shake { animation:inShake 0.35s; border-color:var(--accent); }
+@keyframes inShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* verify button */
+.ec-btn {
+  width:100%; padding:11px; background:var(--ink); color:white;
+  border:none; font-family:var(--mono); font-size:12px; letter-spacing:3px;
+  cursor:pointer; border-radius:2px; transition:background 0.15s; margin-top:4px;
+}
+.ec-btn:hover { background:#2d2a3e; }
+
+/* canvas */
+.ec-canvas { display:block; width:100%; border:1px solid var(--mid); background:var(--paper); border-radius:1px; }
+
+/* grid */
+.ec-grid { display:grid; gap:3px; margin-bottom:12px; }
+.ec-cell {
+  aspect-ratio:1; background:var(--paper); border:1.5px solid var(--mid);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all 0.12s; border-radius:1px; position:relative; overflow:hidden;
+}
+.ec-cell:hover { border-color:#999; background:#ede9e3; }
+.ec-cell.sel { border-color:var(--ink); background:var(--ink); }
+.ec-cell.sel canvas { filter: invert(1); }
+.ec-cell.sel .check-mark { display:block; }
+.check-mark { display:none; position:absolute; bottom:2px; right:3px; font-family:var(--mono); font-size:9px; color:white; }
+
+/* slider */
+.ec-track {
+  width:100%; height:42px; background:var(--paper); border:1px solid var(--mid);
+  position:relative; cursor:pointer; border-radius:2px; overflow:hidden; margin-bottom:6px;
+}
+.ec-track-fill { height:100%; background:var(--ink); opacity:0.08; width:0%; pointer-events:none; }
+.ec-zone { position:absolute; top:0; bottom:0; background:rgba(253,203,110,0.4); border-left:2px solid var(--yellow); border-right:2px solid var(--yellow); pointer-events:none; }
+.ec-thumb {
+  position:absolute; top:8px; bottom:8px; width:4px; background:var(--ink);
+  left:0%; transform:translateX(-50%); pointer-events:none; border-radius:2px;
+}
+.ec-track-label { font-family:var(--mono); font-size:9px; color:var(--dim); text-align:center; margin-bottom:10px; }
+
+/* sequence */
+.ec-seq-canvas {
+  display:block; width:100%; height:68px;
+  border:1px solid var(--mid); background:var(--paper);
+  border-radius:2px; margin-bottom:10px;
+  user-select:none; -webkit-user-select:none; pointer-events:none;
+}
+.ec-seq-prog { font-family:var(--mono); font-size:11px; color:var(--dim); margin-bottom:10px; min-height:18px; }
+.ec-seq-prog span { color:var(--ink); }
+
+.ec-keypad { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-bottom:12px; }
+.ec-key {
+  background:var(--paper); border:1px solid var(--mid); color:var(--ink);
+  font-family:var(--mono); font-size:16px; padding:9px 0; cursor:pointer;
+  border-radius:2px; transition:all 0.1s; text-align:center;
+}
+.ec-key:hover { background:var(--mid); }
+.ec-key:active { background:var(--ink); color:white; }
+
+/* math */
+.ec-math {
+  font-family:var(--mono); font-size:16px; color:var(--ink); text-align:center;
+  padding:18px; background:var(--paper); border:1px solid var(--mid);
+  margin-bottom:12px; white-space:pre-line; line-height:1.9; border-radius:2px;
+}
+
+/* stroop */
+.ec-stroop-word { font-size:40px; font-weight:700; text-align:center; margin-bottom:14px; letter-spacing:1px; }
+.ec-color-row { display:flex; gap:6px; margin-bottom:12px; }
+.ec-swatch { flex:1; height:48px; border:2px solid transparent; border-radius:2px; cursor:pointer; transition:transform 0.1s, border-color 0.1s; position:relative; }
+.ec-swatch:hover { transform:scale(1.04); }
+.ec-swatch.sel { border-color:var(--ink); }
+.ec-swatch-label { position:absolute; bottom:3px; left:0; right:0; text-align:center; font-family:var(--mono); font-size:8px; color:rgba(0,0,0,0.4); }
+
+/* dial */
+.ec-dial-wrap { display:flex; justify-content:center; margin-bottom:10px; }
+.ec-dial {
+  width:140px; height:140px; border-radius:50%; border:2px solid var(--mid);
+  position:relative; cursor:grab; background:var(--paper);
+  display:flex; align-items:center; justify-content:center; user-select:none;
+}
+.ec-dial:active { cursor:grabbing; }
+.ec-dial-handle { position:absolute; width:12px; height:12px; background:var(--accent); border-radius:50%; pointer-events:none; }
+.ec-dial-center { width:8px; height:8px; background:var(--ink); border-radius:50%; }
+.ec-dial-hint { font-family:var(--mono); font-size:10px; color:var(--dim); text-align:center; margin-bottom:10px; }
+.ec-dial-target { font-family:var(--mono); font-size:10px; color:#a07c00; background:#fffbf0; border:1px solid var(--yellow); padding:5px 10px; text-align:center; margin-bottom:10px; border-radius:2px; }
+
+/* morse */
+.ec-morse { font-family:var(--mono); font-size:20px; letter-spacing:5px; text-align:center; color:var(--ink); padding:14px; background:var(--paper); border:1px solid var(--mid); margin-bottom:12px; border-radius:2px; word-break:break-all; }
+.ec-morse-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-bottom:12px; }
+.ec-morse-btn { background:var(--paper); border:1px solid var(--mid); color:var(--ink); font-family:var(--mono); font-size:18px; padding:12px 0; cursor:pointer; border-radius:2px; transition:all 0.1s; }
+.ec-morse-btn:hover { background:var(--mid); }
+.ec-morse-btn:active { background:var(--ink); color:white; }
+
+/* reaction */
+.ec-react-box {
+  width:100%; height:120px; background:var(--paper); border:1px solid var(--mid);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  margin-bottom:8px; border-radius:2px; transition:background 0.08s; position:relative; overflow:hidden;
+}
+.ec-react-box:hover { background:var(--mid); }
+.ec-react-hint { font-family:var(--mono); font-size:10px; color:var(--dim); text-align:center; margin-bottom:10px; }
+
+/* sort */
+.ec-sort-slots { display:flex; gap:4px; margin-bottom:8px; }
+.ec-sort-slot { flex:1; height:46px; border:1px dashed #ccc; border-radius:2px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:16px; color:var(--dim); transition:all 0.15s; }
+.ec-sort-slot.filled { border-style:solid; border-color:var(--ink); color:var(--ink); background:var(--paper); }
+.ec-sort-items { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:12px; }
+.ec-sort-num { background:var(--paper); border:1.5px solid var(--mid); color:var(--ink); font-family:var(--mono); font-size:16px; padding:9px 14px; cursor:pointer; border-radius:2px; transition:all 0.12s; }
+.ec-sort-num:hover { background:var(--mid); }
+.ec-sort-num.used { opacity:0.25; pointer-events:none; }
+
+/* coord canvas */
+.ec-coord { display:block; width:100%; height:200px; background:var(--paper); border:1px solid var(--mid); border-radius:2px; margin-bottom:8px; cursor:crosshair; }
+.ec-coord-hint { font-family:var(--mono); font-size:9px; color:var(--dim); text-align:center; margin-bottom:10px; }
+
+/* shadow */
+.ec-shadow-display { font-size:72px; text-align:center; padding:12px; background:var(--paper); border:1px solid var(--mid); margin-bottom:10px; border-radius:2px; filter:contrast(0) brightness(0.12); line-height:1; }
+.ec-shadow-opts { display:flex; gap:6px; margin-bottom:12px; justify-content:center; }
+.ec-shadow-opt { width:80px; height:80px; background:var(--paper); border:2px solid var(--mid); cursor:pointer; display:flex; align-items:center; justify-content:center; border-radius:2px; transition:border-color 0.1s; font-size:28px; }
+.ec-shadow-opt:hover { border-color:#999; }
+.ec-shadow-opt.sel { border-color:var(--ink); background:var(--ink); filter:invert(1); }
+
+/* maze */
+.ec-maze-wrap { position:relative; margin-bottom:12px; }
+.ec-maze-canvas { display:block; width:100%; border:1px solid var(--mid); border-radius:2px; }
+
+/* binary */
+.ec-binary { font-family:var(--mono); font-size:22px; letter-spacing:4px; text-align:center; padding:14px; background:var(--paper); border:1px solid var(--mid); margin-bottom:12px; color:var(--ink); border-radius:2px; }
+.ec-bin-opts { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:12px; }
+.ec-bin-btn { background:var(--paper); border:1px solid var(--mid); color:var(--ink); font-family:var(--mono); font-size:16px; padding:11px 0; cursor:pointer; border-radius:2px; transition:all 0.1s; }
+.ec-bin-btn:hover { background:var(--mid); }
+.ec-bin-btn:active { background:var(--ink); color:white; }
+
+/* mirror */
+.ec-mirror-row { display:flex; gap:10px; margin-bottom:12px; align-items:flex-start; }
+.ec-mirror-label { font-family:var(--mono); font-size:9px; color:var(--dim); text-align:center; margin-top:4px; }
+
+/* success */
+.ec-success { display:none; text-align:center; padding:30px 0 10px; }
+.ec-success .big-check { width:64px; height:64px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; animation:sPop 0.4s cubic-bezier(0.175,0.885,0.32,1.4) forwards; }
+@keyframes sPop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.ec-success h3 { font-size:18px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+.ec-success p  { font-family:var(--mono); font-size:10px; color:var(--dim); letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<div class="page-label">WT*Rca™ — widget embed demo</div>
+
+<div class="demo-card">
+  <h2>ユーザー登録</h2>
+  <div class="sub">WT*Rca™ の埋め込みデモ — 全12問クリアで送信可能</div>
+
+  <div class="field"><label>メールアドレス</label><input type="email" placeholder="you@example.com"></div>
+  <div class="field"><label>パスワード</label><input type="password" placeholder="••••••••"></div>
+
+  <!-- ▼▼ wtrecaptcha WIDGET ▼▼ -->
+  <div class="ecw" id="ecw" onclick="ecOpen()">
+    <div class="ecw-box" id="ecw-box">
+      <div class="spin"></div>
+      <svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+        <polyline points="1,5.5 5,9.5 12,1" stroke="#00b894" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="ecw-text">
+      <div class="main" id="ecw-label">私はロボットではありません</div>
+      <div class="sub2" id="ecw-sub">WT*Rca v3.0</div>
+    </div>
+    <div class="ecw-badge">
+      <div class="ecw-badge-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="5" height="5" fill="white" opacity="0.9"/>
+          <rect x="9" y="2" width="5" height="5" fill="white" opacity="0.9"/>
+          <rect x="2" y="9" width="5" height="5" fill="white" opacity="0.9"/>
+          <rect x="10" y="10" width="3" height="3" fill="white" opacity="0.9"/>
+          <rect x="10" y="14" width="1" height="1" fill="white" opacity="0.6"/>
+          <rect x="14" y="10" width="1" height="1" fill="white" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="ecw-badge-label">WT*<br>Rca</div>
+    </div>
+  </div>
+  <!-- ▲▲ /WIDGET ▲▲ -->
+
+  <button class="submit" id="submit-btn" disabled>登録する</button>
+</div>
+
+<!-- MODAL -->
+<div class="eco" id="eco">
+  <div class="ecm">
+    <div class="ecm-head">
+      <div class="ecm-title">
+        <h3>WHAT THE F*** RECAPTCHA PROTOCOL</h3>
+        <p id="ecm-name">—</p>
+      </div>
+      <div class="ecm-meta">
+        <div class="ecm-timer" id="ecm-timer">—</div>
+        <button class="ecm-close" onclick="ecClose()">✕</button>
+      </div>
+    </div>
+    <div class="ecm-dots" id="ecm-dots"></div>
+    <div class="ecm-body">
+      <div class="ec-status" id="ec-status"></div>
+
+      <!-- C1: Distorted text (canvas) -->
+      <div class="ec-ch" id="ec1">
+        <div class="ec-q">歪んだ文字を読んで入力してください。<br><small style="color:var(--dim)">クリックで再生成 / -2秒ペナルティ</small></div>
+        <canvas class="ec-canvas" id="c1-cv" height="90" style="cursor:pointer;margin-bottom:5px;"></canvas>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-align:right;margin-bottom:10px;">CLICK TO REFRESH (–2s)</div>
+        <input class="ec-in" id="c1-in" placeholder="入力..." maxlength="8" autocomplete="off" spellcheck="false">
+        <button class="ec-btn" onclick="chk(1)">VERIFY</button>
+      </div>
+
+      <!-- C2: Grid — find the odd shape -->
+      <div class="ec-ch" id="ec2">
+        <div class="ec-q" id="c2-q"></div>
+        <div class="ec-grid" id="c2-grid" style="grid-template-columns:repeat(4,1fr)"></div>
+        <button class="ec-btn" onclick="chk(2)">VERIFY</button>
+      </div>
+
+      <!-- C3: Precision slider -->
+      <div class="ec-ch" id="ec3">
+        <div class="ec-q">スライダーを <strong>黄色のゾーン</strong> に正確に合わせてください。<br><small style="color:var(--dim)">ゾーン幅 7% のみ</small></div>
+        <div class="ec-track" id="c3-track">
+          <div class="ec-track-fill" id="c3-fill"></div>
+          <div class="ec-zone"  id="c3-zone"></div>
+          <div class="ec-thumb" id="c3-thumb"></div>
+        </div>
+        <div class="ec-track-label">ドラッグ or クリック</div>
+        <button class="ec-btn" onclick="chk(3)">VERIFY</button>
+      </div>
+
+      <!-- C4: Reverse sequence -->
+      <div class="ec-ch" id="ec4">
+        <div class="ec-q">数列を <strong>逆順</strong> で入力してください。<br><small style="color:var(--dim)">3秒後に消えます</small></div>
+        <canvas class="ec-seq-canvas" id="c4-cv" height="68"></canvas>
+        <div class="ec-seq-prog">入力: <span id="c4-entered">—</span></div>
+        <div class="ec-keypad" id="c4-keys"></div>
+      </div>
+
+      <!-- C5: Math formula -->
+      <div class="ec-ch" id="ec5">
+        <div class="ec-q">計算結果を入力してください。</div>
+        <div class="ec-math" id="c5-math"></div>
+        <input class="ec-in" type="number" id="c5-in" placeholder="答え..." style="letter-spacing:2px;">
+        <button class="ec-btn" onclick="chk(5)">VERIFY</button>
+      </div>
+
+      <!-- C6: Stroop -->
+      <div class="ec-ch" id="ec6">
+        <div class="ec-q">文字が示す <strong>色名</strong> と一致する色のボックスを選んでください。<br><small style="color:var(--dim)">文字の色は無視すること（ストループ効果）</small></div>
+        <div class="ec-stroop-word" id="c6-word"></div>
+        <div class="ec-color-row" id="c6-swatches"></div>
+        <button class="ec-btn" onclick="chk(6)">VERIFY</button>
+      </div>
+
+      <!-- C7: Rotation dial -->
+      <div class="ec-ch" id="ec7">
+        <div class="ec-q">赤い点を指定の角度に回してください。</div>
+        <div class="ec-dial-target" id="c7-target-label">目標: —</div>
+        <div class="ec-dial-wrap">
+          <div class="ec-dial" id="c7-dial">
+            <div class="ec-dial-handle" id="c7-handle"></div>
+            <div class="ec-dial-center"></div>
+          </div>
+        </div>
+        <div class="ec-dial-hint" id="c7-hint">0°</div>
+        <button class="ec-btn" onclick="chk(7)">VERIFY</button>
+      </div>
+
+      <!-- C8: Morse -->
+      <div class="ec-ch" id="ec8">
+        <div class="ec-q">モールス信号を解読して、対応する数字を選んでください。</div>
+        <div class="ec-morse" id="c8-morse"></div>
+        <div class="ec-morse-grid" id="c8-opts"></div>
+      </div>
+
+      <!-- C9: Click the coordinate -->
+      <div class="ec-ch" id="ec9">
+        <div class="ec-q">グラフ上の <strong>赤い × 印</strong> をクリックしてください。<br><small style="color:var(--dim)">許容誤差 ±16px</small></div>
+        <canvas class="ec-coord" id="c9-cv" width="480" height="200"></canvas>
+        <div class="ec-coord-hint" id="c9-hint">キャンバスをクリック</div>
+        <button class="ec-btn" onclick="chk(9)">VERIFY</button>
+      </div>
+
+      <!-- C10: Sort numbers ascending -->
+      <div class="ec-ch" id="ec10">
+        <div class="ec-q">数字を <strong>小さい順</strong> にタップして並べてください。</div>
+        <div class="ec-sort-slots" id="c10-slots"></div>
+        <div class="ec-sort-items" id="c10-items"></div>
+        <button class="ec-btn" onclick="chk(10)">VERIFY</button>
+      </div>
+
+      <!-- C11: Reaction (click when red) -->
+      <div class="ec-ch" id="ec11">
+        <div class="ec-q">四角が <strong>赤くなったら</strong> すぐクリック！<br><small style="color:var(--dim)">フェイクあり。赤くなる前はダメ</small></div>
+        <div class="ec-react-box" id="c11-box" onclick="reactClick()">
+          <canvas id="c11-cv" width="460" height="88"></canvas>
+        </div>
+        <div class="ec-react-hint" id="c11-hint">待機中...</div>
+      </div>
+
+      <!-- C12: Binary number -->
+      <div class="ec-ch" id="ec12">
+        <div class="ec-q">2進数を10進数に変換してください。</div>
+        <div class="ec-binary" id="c12-bin"></div>
+        <div class="ec-bin-opts" id="c12-opts"></div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="ec-success" id="ec-success">
+        <div class="big-check">
+          <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
+            <polyline points="2,11 10,19 26,2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>確認完了</h3>
+        <p>HUMAN_CONFIRMED // WT*Rca™</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ── STATE ── */
+const S = {
+  verified: false, current: 0, total: 12, order: [],
+  timerInt: null,
+  c1text: '', c1pen: 0,
+  c2correct: [], c2shapes: [],
+  c3val: 0, c3target: {min:0,max:0}, c3drag: false,
+  c4answer: [], c4entered: [],
+  c5answer: 0,
+  c6correct: -1, c6sel: -1,
+  c7angle: 0, c7target: {min:0,max:0}, c7drag: false,
+  c8answer: '',
+  c9target: {x:0,y:0}, c9click: null,
+  c10answer: [], c10slots: [], c10picked: [],
+  c11red: false, c11done: false, c11t: null, c11ft: null,
+  c12answer: 0,
+};
+
+const TIMERS  = {1:11,2:16,3:9,4:22,5:14,6:7,7:12,8:15,9:13,10:18,11:10,12:12};
+const CNAMES  = {1:'歪み文字認識',2:'図形グリッド',3:'精密スライダー',4:'逆順記憶',5:'数式計算',6:'ストループ効果',7:'ダイヤル回転',8:'モールス解読',9:'座標クリック',10:'数字ソート',11:'リアクション',12:'2進数変換'};
+
+/* ── OPEN/CLOSE ── */
+function ecOpen() {
+  if (S.verified) return;
+  S.order = [1,2,3,4,5,6,7,8,9,10,11,12].sort(()=>Math.random()-0.5);
+  S.current = 0;
+  buildDots();
+  document.getElementById('eco').classList.add('open');
+  document.getElementById('ecw').classList.add('loading');
+  setTimeout(()=>{ document.getElementById('ecw').classList.remove('loading'); goNext(); }, 500);
+}
+function ecClose() { stopTimer(); killReact(); document.getElementById('eco').classList.remove('open'); }
+
+/* ── DOTS ── */
+function buildDots() {
+  const c = document.getElementById('ecm-dots'); c.innerHTML = '';
+  for (let i=0;i<S.total;i++) { const d=document.createElement('div'); d.className='dot'; d.id='d'+i; c.appendChild(d); }
+}
+function refreshDots() {
+  for (let i=0;i<S.total;i++) {
+    const el=document.getElementById('d'+i); if(!el) continue;
+    el.className='dot'+(i<S.current?' done':i===S.current?' now':'');
+  }
+}
+
+/* ── TIMER ── */
+function startTimer(n) {
+  stopTimer();
+  let t = TIMERS[n];
+  const el = document.getElementById('ecm-timer');
+  el.textContent=t; el.className='ecm-timer'; el.style.color='';
+  S.timerInt = setInterval(()=>{
+    t--; el.textContent=t;
+    if(t<=3) el.className='ecm-timer hot';
+    if(t<=0){stopTimer(); fail('タイムオーバー — 最初から');}
+  },1000);
+}
+function stopTimer(){clearInterval(S.timerInt);}
+
+/* ── NAV ── */
+function goNext() {
+  S.current++;
+  if (S.current > S.total) { onVerified(); return; }
+  refreshDots(); clearStatus();
+  const n = S.order[S.current-1];
+  document.getElementById('ecm-name').textContent = `${S.current} / ${S.total} — ${CNAMES[n]}`;
+  document.querySelectorAll('.ec-ch').forEach(e=>e.classList.remove('active'));
+  document.getElementById('ec'+n).classList.add('active');
+  document.querySelector('.ecm-body').scrollTop=0;
+  ({1:initC1,2:initC2,3:initC3,4:initC4,5:initC5,6:initC6,7:initC7,8:initC8,9:initC9,10:initC10,11:initC11,12:initC12}[n])();
+  startTimer(n);
+}
+
+function fail(msg) {
+  stopTimer(); killReact();
+  setStatus('err', '✗ '+msg);
+  setTimeout(()=>{
+    S.current=0;
+    S.order=[1,2,3,4,5,6,7,8,9,10,11,12].sort(()=>Math.random()-0.5);
+    buildDots(); goNext();
+  }, 1800);
+}
+
+function onVerified() {
+  stopTimer();
+  document.querySelectorAll('.ec-ch').forEach(e=>e.classList.remove('active'));
+  document.getElementById('ec-success').style.display='block';
+  document.getElementById('ecm-name').textContent='確認完了';
+  const tel=document.getElementById('ecm-timer'); tel.textContent='✓'; tel.className='ecm-timer'; tel.style.color='var(--green)';
+  S.verified=true;
+  setTimeout(()=>{
+    ecClose();
+    // Hide demo card, show docs
+    document.querySelector('.page-label').style.display='none';
+    document.querySelector('.demo-card').style.display='none';
+    const docs=document.getElementById('docs-page');
+    docs.style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+    document.getElementById('ec-success').style.display='none';
+    tel.style.color=''; tel.textContent='—';
+  },2200);
+}
+
+/* ── STATUS ── */
+function setStatus(t,m){const el=document.getElementById('ec-status');if(!t){el.className='ec-status';return;}el.className='ec-status '+t;el.textContent=m;if(t!=='err')setTimeout(()=>setStatus(''),2500);}
+function clearStatus(){setStatus('');}
+function shake(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),400);}
+
+/* ── CHECK DISPATCH ── */
+function chk(n){({1:chkC1,2:chkC2,3:chkC3,5:chkC5,6:chkC6,7:chkC7,9:chkC9,10:chkC10}[n])();}
+
+/* ════════════════════════════════════════
+   C1 — DISTORTED TEXT
+════════════════════════════════════════ */
+const ABC='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+function initC1(){
+  S.c1text=rndStr(7); drawC1();
+  const inp=document.getElementById('c1-in'); inp.value=''; inp.focus();
+  inp.onkeydown=e=>{if(e.key==='Enter')chkC1();};
+  document.getElementById('c1-cv').onclick=()=>{S.c1text=rndStr(7);drawC1();setStatus('warn','-2秒ペナルティ');};
+}
+function rndStr(n){return Array.from({length:n},()=>ABC[~~(Math.random()*ABC.length)]).join('');}
+function drawC1(){
+  const cv=document.getElementById('c1-cv'); cv.width=cv.clientWidth||480; const W=cv.width,H=90;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  // background — fine graph paper
+  ctx.fillStyle='#f5f2ed'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(0,0,0,0.06)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=12){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=12){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  // noise lines
+  for(let i=0;i<10;i++){
+    ctx.beginPath(); ctx.strokeStyle=`rgba(0,0,0,${0.03+Math.random()*0.07})`; ctx.lineWidth=0.8+Math.random()*1.5;
+    ctx.moveTo(Math.random()*W,Math.random()*H);
+    ctx.bezierCurveTo(Math.random()*W,Math.random()*H,Math.random()*W,Math.random()*H,Math.random()*W,Math.random()*H);
+    ctx.stroke();
+  }
+  // noise dots
+  for(let i=0;i<120;i++){ctx.fillStyle=`rgba(0,0,0,${0.04+Math.random()*0.1})`;ctx.fillRect(Math.random()*W,Math.random()*H,1.5,1.5);}
+  // chars
+  const step=(W-40)/S.c1text.length;
+  for(let i=0;i<S.c1text.length;i++){
+    ctx.save();
+    ctx.translate(22+step*i+step/2, H/2+6);
+    ctx.rotate((Math.random()-0.5)*0.55);
+    ctx.scale(0.8+Math.random()*0.45, 0.7+Math.random()*0.5);
+    const fs=24+~~(Math.random()*12);
+    ctx.font=`${Math.random()>0.5?'bold ':''} ${fs}px 'IBM Plex Mono',monospace`;
+    ctx.fillStyle=`rgba(0,0,0,${0.55+Math.random()*0.45})`; ctx.fillText(S.c1text[i],0,0);
+    ctx.restore();
+  }
+  // wave
+  const id=ctx.getImageData(0,0,W,H),d=id.data,nd=new Uint8ClampedArray(d);
+  for(let y=0;y<H;y++){const wx=Math.sin(y/5)*5;for(let x=0;x<W;x++){const sx=Math.round(x+wx);if(sx>=0&&sx<W){const si=(y*W+sx)*4,di=(y*W+x)*4;nd[di]=d[si];nd[di+1]=d[si+1];nd[di+2]=d[si+2];nd[di+3]=d[si+3];}}}
+  ctx.putImageData(new ImageData(nd,W,H),0,0);
+}
+function chkC1(){
+  if(document.getElementById('c1-in').value.trim()===S.c1text)goNext();
+  else{shake('c1-in');fail('不正解 / 正解: '+S.c1text);}
+}
+
+/* ════════════════════════════════════════
+   C2 — SHAPE GRID (find the odd one out)
+════════════════════════════════════════ */
+const SHAPES=['circle','square','triangle','diamond','cross','star','hex','arrow'];
+
+function drawShape(ctx, type, cx, cy, r, color){
+  ctx.fillStyle=color; ctx.strokeStyle=color; ctx.lineWidth=2;
+  ctx.beginPath();
+  if(type==='circle'){ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();}
+  else if(type==='square'){ctx.fillRect(cx-r,cy-r,r*2,r*2);}
+  else if(type==='triangle'){ctx.moveTo(cx,cy-r);ctx.lineTo(cx+r,cy+r*0.7);ctx.lineTo(cx-r,cy+r*0.7);ctx.closePath();ctx.fill();}
+  else if(type==='diamond'){ctx.moveTo(cx,cy-r);ctx.lineTo(cx+r*0.7,cy);ctx.lineTo(cx,cy+r);ctx.lineTo(cx-r*0.7,cy);ctx.closePath();ctx.fill();}
+  else if(type==='cross'){ctx.strokeStyle=color;ctx.lineWidth=r*0.55;ctx.moveTo(cx-r*0.7,cy);ctx.lineTo(cx+r*0.7,cy);ctx.stroke();ctx.beginPath();ctx.moveTo(cx,cy-r*0.7);ctx.lineTo(cx,cy+r*0.7);ctx.stroke();}
+  else if(type==='star'){for(let k=0;k<5;k++){const a=-Math.PI/2+k*Math.PI*2/5,b=a+Math.PI/5;k===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));ctx.lineTo(cx+(r*0.42)*Math.cos(b),cy+(r*0.42)*Math.sin(b));}ctx.closePath();ctx.fill();}
+  else if(type==='hex'){for(let k=0;k<6;k++){const a=k*Math.PI/3-Math.PI/6;k===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}ctx.closePath();ctx.fill();}
+  else if(type==='arrow'){ctx.moveTo(cx-r*0.6,cy-r*0.3);ctx.lineTo(cx+r*0.1,cy-r*0.3);ctx.lineTo(cx+r*0.1,cy-r*0.6);ctx.lineTo(cx+r*0.6,cy);ctx.lineTo(cx+r*0.1,cy+r*0.6);ctx.lineTo(cx+r*0.1,cy+r*0.3);ctx.lineTo(cx-r*0.6,cy+r*0.3);ctx.closePath();ctx.fill();}
+}
+
+function initC2(){
+  // Pick base shape and odd shape
+  const base=SHAPES[~~(Math.random()*SHAPES.length)];
+  let odd; do{odd=SHAPES[~~(Math.random()*SHAPES.length)];}while(odd===base);
+  // 4x4 = 16 cells, 3-4 odd ones
+  const count=3+~~(Math.random()*2);
+  let types=Array(16).fill(base);
+  const pos=[]; while(pos.length<count){const p=~~(Math.random()*16);if(!pos.includes(p))pos.push(p);}
+  pos.forEach(p=>types[p]=odd);
+  S.c2correct=pos.slice();
+  S.c2shapes=types;
+
+  document.getElementById('c2-q').innerHTML=`<strong>「${shapeJP(odd)}」</strong> をすべて選んでください。`;
+  const g=document.getElementById('c2-grid'); g.innerHTML='';
+  types.forEach((sh,i)=>{
+    const cell=document.createElement('div'); cell.className='ec-cell'; cell.dataset.i=i;
+    const cv=document.createElement('canvas'); cv.width=48; cv.height=48;
+    const ctx=cv.getContext('2d');
+    ctx.fillStyle='#f5f2ed'; ctx.fillRect(0,0,48,48);
+    drawShape(ctx,sh,24,24,13,'#1a1825');
+    cell.appendChild(cv);
+    const ck=document.createElement('div'); ck.className='check-mark'; ck.textContent='✓'; cell.appendChild(ck);
+    cell.onclick=()=>cell.classList.toggle('sel');
+    g.appendChild(cell);
+  });
+}
+function shapeJP(s){return{circle:'円',square:'正方形',triangle:'三角形',diamond:'菱形',cross:'十字',star:'星',hex:'六角形',arrow:'矢印'}[s]||s;}
+function chkC2(){
+  const sel=[...document.querySelectorAll('#c2-grid .ec-cell.sel')].map(c=>+c.dataset.i).sort((a,b)=>a-b).join(',');
+  if(sel===S.c2correct.slice().sort((a,b)=>a-b).join(','))goNext();
+  else fail('選択が違います');
+}
+
+/* ════════════════════════════════════════
+   C3 — PRECISION SLIDER
+════════════════════════════════════════ */
+function initC3(){
+  const m=15+~~(Math.random()*72); S.c3target={min:m,max:m+7}; S.c3val=0;
+  document.getElementById('c3-zone').style.left=m+'%';
+  document.getElementById('c3-zone').style.width='7%';
+  updSlider(0);
+  const tr=document.getElementById('c3-track');
+  const mv=e=>{const r=tr.getBoundingClientRect();const cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left;S.c3val=Math.max(0,Math.min(100,(cx/r.width)*100));updSlider(S.c3val);};
+  tr.onmousedown=e=>{S.c3drag=true;mv(e);};
+  document.onmousemove=e=>{if(S.c3drag)mv(e);};
+  document.onmouseup=()=>{S.c3drag=false;};
+  tr.ontouchstart=e=>{S.c3drag=true;mv(e);e.preventDefault();};
+  document.ontouchmove=e=>{if(S.c3drag){mv(e);e.preventDefault();}};
+  document.ontouchend=()=>{S.c3drag=false;};
+}
+function updSlider(v){document.getElementById('c3-fill').style.width=v+'%';document.getElementById('c3-thumb').style.left=v+'%';}
+function chkC3(){
+  if(S.c3val>=S.c3target.min&&S.c3val<=S.c3target.max)goNext();
+  else fail('ゾーンに合っていません');
+}
+
+/* ════════════════════════════════════════
+   C4 — REVERSE SEQUENCE
+════════════════════════════════════════ */
+function initC4(){
+  const seq=Array.from({length:7},()=>~~(Math.random()*10));
+  S.c4answer=[...seq].reverse(); S.c4entered=[];
+  S.c4seq=seq;
+  document.getElementById('c4-entered').textContent='—';
+  drawSeq4(false);
+  setTimeout(()=>{ drawSeq4(true); },3000);
+  const kp=document.getElementById('c4-keys'); kp.innerHTML='';
+  for(let n=0;n<=9;n++){
+    const b=document.createElement('button'); b.className='ec-key'; b.textContent=n;
+    b.onclick=()=>{if(S.c4entered.length>=S.c4answer.length)return;S.c4entered.push(n);updSeq();if(S.c4entered.length===S.c4answer.length)chkC4();};
+    kp.appendChild(b);
+  }
+  const bk=document.createElement('button'); bk.className='ec-key'; bk.textContent='⌫'; bk.style.color='var(--accent)';
+  bk.onclick=()=>{S.c4entered.pop();updSeq();}; kp.appendChild(bk);
+}
+function drawSeq4(hidden){
+  const cv=document.getElementById('c4-cv');
+  cv.width=cv.clientWidth||460; const W=cv.width,H=68;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#f5f2ed'; ctx.fillRect(0,0,W,H);
+  if(hidden){
+    // Step 1: draw numbers with heavy blur on an offscreen canvas
+    const off=document.createElement('canvas'); off.width=W; off.height=H;
+    const octx=off.getContext('2d');
+    octx.fillStyle='#f5f2ed'; octx.fillRect(0,0,W,H);
+    octx.save();
+    octx.filter='blur(9px)';
+    octx.font='bold 28px IBM Plex Mono,monospace';
+    octx.textAlign='center'; octx.textBaseline='middle';
+    octx.fillStyle='rgba(0,0,0,0.55)';
+    // draw each digit separately so blur stays within bounds
+    const nums=S.c4seq; const step=W/(nums.length+1);
+    nums.forEach((n,i)=>{ octx.fillText(n,(i+1)*step,H/2); });
+    octx.restore();
+    // Step 2: read pixel data from offscreen, write into main canvas — source text string is now gone
+    const imgData=octx.getImageData(0,0,W,H);
+    ctx.putImageData(imgData,0,0);
+    // Step 3: overlay fine noise so it looks even more scrambled
+    for(let i=0;i<600;i++){
+      ctx.fillStyle=`rgba(245,242,237,${0.3+Math.random()*0.5})`;
+      ctx.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*3,1+Math.random()*3);
+    }
+    // Step 4: wipe the sequence from state — it's now only pixels, nowhere in memory as readable text
+    S.c4seq=null;
+  } else {
+    // Clear readable numbers
+    const nums=S.c4seq;
+    const step=W/(nums.length+1);
+    ctx.font='bold 26px IBM Plex Mono,monospace';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='#1a1825';
+    nums.forEach((n,i)=>{ ctx.fillText(n,(i+1)*step,H/2); });
+  }
+}
+function updSeq(){document.getElementById('c4-entered').textContent=S.c4entered.length?S.c4entered.join(' '):'—';}
+function chkC4(){if(S.c4entered.every((v,i)=>v===S.c4answer[i]))goNext();else fail('逆順が違います');}
+
+/* ════════════════════════════════════════
+   C5 — MATH
+════════════════════════════════════════ */
+function initC5(){
+  const a=5+~~(Math.random()*20),b=2+~~(Math.random()*10),c=1+~~(Math.random()*5),d=2+~~(Math.random()*8);
+  S.c5answer=(a*b)-(c*d)+Math.floor(Math.sqrt(a*b));
+  document.getElementById('c5-math').textContent=`( ${a} × ${b} ) − ( ${c} × ${d} ) + ⌊√(${a}×${b})⌋\n= ?`;
+  const inp=document.getElementById('c5-in'); inp.value=''; inp.focus();
+  inp.onkeydown=e=>{if(e.key==='Enter')chkC5();};
+}
+function chkC5(){
+  if(+document.getElementById('c5-in').value===S.c5answer)goNext();
+  else{shake('c5-in');fail(`不正解 / 正解: ${S.c5answer}`);}
+}
+
+/* ════════════════════════════════════════
+   C6 — STROOP
+════════════════════════════════════════ */
+const COLS=[
+  {n:'あか',h:'#d63031'},{n:'あお',h:'#0984e3'},{n:'きいろ',h:'#f9ca24'},
+  {n:'みどり',h:'#00b894'},{n:'むらさき',h:'#6c5ce7'},{n:'くろ',h:'#2d3436'},
+  {n:'オレンジ',h:'#e17055'},{n:'みずいろ',h:'#74b9ff'},
+];
+function initC6(){
+  S.c6sel=-1;
+  const ti=~~(Math.random()*COLS.length); const target=COLS[ti];
+  let di; do{di=~~(Math.random()*COLS.length);}while(di===ti);
+  document.getElementById('c6-word').textContent=target.n;
+  document.getElementById('c6-word').style.color=COLS[di].h;
+  let opts=[...COLS].sort(()=>Math.random()-0.5).slice(0,6);
+  if(!opts.find(c=>c.n===target.n))opts[~~(Math.random()*opts.length)]=target;
+  S.c6correct=opts.findIndex(c=>c.n===target.n);
+  const row=document.getElementById('c6-swatches'); row.innerHTML='';
+  opts.forEach((col,i)=>{
+    const s=document.createElement('div'); s.className='ec-swatch'; s.style.background=col.h;
+    const lb=document.createElement('div'); lb.className='ec-swatch-label'; lb.textContent=col.n; s.appendChild(lb);
+    s.onclick=()=>{document.querySelectorAll('.ec-swatch').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');S.c6sel=i;};
+    row.appendChild(s);
+  });
+}
+function chkC6(){
+  if(S.c6sel<0){setStatus('warn','色を選んでください');return;}
+  if(S.c6sel===S.c6correct)goNext();else fail('ストループ効果に引っかかりました');
+}
+
+/* ════════════════════════════════════════
+   C7 — DIAL ROTATION
+════════════════════════════════════════ */
+function initC7(){
+  S.c7angle=Math.random()*360;
+  const tgt=20+~~(Math.random()*320);
+  S.c7target={min:(tgt-13+360)%360,max:(tgt+13)%360};
+  document.getElementById('c7-target-label').textContent=`目標: ${tgt}° ± 13° に合わせてください`;
+  updDial();
+  const dial=document.getElementById('c7-dial');
+  let last=null;
+  const ga=e=>{const r=dial.getBoundingClientRect();const cx=(e.touches?e.touches[0].clientX:e.clientX)-(r.left+r.width/2);const cy=(e.touches?e.touches[0].clientY:e.clientY)-(r.top+r.height/2);return(Math.atan2(cy,cx)*180/Math.PI+90+360)%360;};
+  dial.onmousedown=e=>{S.c7drag=true;last=ga(e);};
+  document.onmousemove=e=>{if(!S.c7drag)return;const a=ga(e);S.c7angle=(S.c7angle+(a-last)+360)%360;last=a;updDial();};
+  document.onmouseup=()=>{S.c7drag=false;};
+  dial.ontouchstart=e=>{S.c7drag=true;last=ga(e);e.preventDefault();};
+  document.ontouchmove=e=>{if(!S.c7drag)return;const a=ga(e);S.c7angle=(S.c7angle+(a-last)+360)%360;last=a;updDial();e.preventDefault();};
+  document.ontouchend=()=>{S.c7drag=false;};
+}
+function updDial(){
+  const a=S.c7angle,rad=(a-90)*Math.PI/180,r=54;
+  const h=document.getElementById('c7-handle');
+  h.style.left=(50+r*Math.cos(rad))+'%'; h.style.top=(50+r*Math.sin(rad))+'%'; h.style.transform='translate(-50%,-50%)';
+  document.getElementById('c7-hint').textContent=`現在: ${Math.round(a)}°`;
+}
+function chkC7(){
+  const a=S.c7angle,{min,max}=S.c7target;
+  const ok=min<=max?a>=min&&a<=max:(a>=min||a<=max);
+  if(ok)goNext();else fail('角度がずれています');
+}
+
+/* ════════════════════════════════════════
+   C8 — MORSE
+════════════════════════════════════════ */
+const MORSE={'0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.','A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..'};
+function initC8(){
+  const num=10+~~(Math.random()*90);
+  document.getElementById('c8-morse').textContent=String(num).split('').map(c=>MORSE[c]).join(' / ');
+  S.c8answer=String(num);
+  const opts=new Set([num]); while(opts.size<6)opts.add(10+~~(Math.random()*90));
+  const arr=[...opts].sort(()=>Math.random()-0.5);
+  const cont=document.getElementById('c8-opts'); cont.innerHTML='';
+  arr.forEach(n=>{
+    const b=document.createElement('button'); b.className='ec-morse-btn'; b.textContent=n;
+    b.onclick=()=>{if(String(n)===S.c8answer)goNext();else fail('モールス解読ミス');};
+    cont.appendChild(b);
+  });
+}
+
+/* ════════════════════════════════════════
+   C9 — COORDINATE CLICK
+════════════════════════════════════════ */
+function initC9(){
+  S.c9click=null;
+  const cv=document.getElementById('c9-cv'); cv.width=cv.clientWidth||480; const W=cv.width,H=200;
+  const tx=50+~~(Math.random()*(W-100)),ty=50+~~(Math.random()*(H-100));
+  S.c9target={x:tx,y:ty};
+  drawCoord9(W,H,tx,ty,null);
+  cv.onclick=e=>{
+    const r=cv.getBoundingClientRect();
+    S.c9click={x:(e.clientX-r.left)*(W/r.width),y:(e.clientY-r.top)*(H/r.height)};
+    drawCoord9(W,H,tx,ty,S.c9click);
+    document.getElementById('c9-hint').textContent=`クリック (${~~S.c9click.x}, ${~~S.c9click.y})  目標 (${tx}, ${ty})`;
+  };
+}
+function drawCoord9(W,H,tx,ty,click){
+  const cv=document.getElementById('c9-cv'); const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#f5f2ed'; ctx.fillRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle='rgba(0,0,0,0.07)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  // axes
+  ctx.strokeStyle='rgba(0,0,0,0.2)'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(30,0);ctx.lineTo(30,H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,H-20);ctx.lineTo(W,H-20);ctx.stroke();
+  // axis labels
+  ctx.fillStyle='rgba(0,0,0,0.3)'; ctx.font='8px IBM Plex Mono,monospace';
+  for(let x=50;x<W;x+=40)ctx.fillText(x-30,x-4,H-6);
+  for(let y=20;y<H-20;y+=40)ctx.fillText(H-20-y,4,y+4);
+  // scatter points
+  for(let i=0;i<20;i++){const px=40+Math.random()*(W-60),py=10+Math.random()*(H-40);ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fillStyle='rgba(9,132,227,0.35)';ctx.fill();}
+  // target X
+  const s=9; ctx.strokeStyle='#d63031'; ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(tx-s,ty-s);ctx.lineTo(tx+s,ty+s);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(tx+s,ty-s);ctx.lineTo(tx-s,ty+s);ctx.stroke();
+  // click marker
+  if(click){
+    ctx.beginPath();ctx.arc(click.x,click.y,5,0,Math.PI*2);ctx.fillStyle='var(--green)';ctx.fillStyle='#00b894';ctx.fill();
+    ctx.strokeStyle='rgba(0,184,148,0.3)';ctx.lineWidth=8;ctx.beginPath();ctx.arc(click.x,click.y,11,0,Math.PI*2);ctx.stroke();
+  }
+}
+function chkC9(){
+  if(!S.c9click){setStatus('warn','クリックしてください');return;}
+  const dx=S.c9click.x-S.c9target.x,dy=S.c9click.y-S.c9target.y;
+  if(Math.sqrt(dx*dx+dy*dy)<=16)goNext();else fail('座標がずれています (±16px)');
+}
+
+/* ════════════════════════════════════════
+   C10 — NUMBER SORT
+════════════════════════════════════════ */
+function initC10(){
+  const nums=Array.from({length:5},()=>1+~~(Math.random()*99)).sort(()=>Math.random()-0.5);
+  S.c10answer=[...nums].sort((a,b)=>a-b);
+  S.c10slots=Array(5).fill(null); S.c10picked=[];
+  const slots=document.getElementById('c10-slots'); slots.innerHTML='';
+  for(let i=0;i<5;i++){const s=document.createElement('div');s.className='ec-sort-slot';s.dataset.i=i;s.textContent=i+1;slots.appendChild(s);}
+  const items=document.getElementById('c10-items'); items.innerHTML='';
+  nums.forEach((n,i)=>{
+    const el=document.createElement('div');el.className='ec-sort-num';el.textContent=n;el.dataset.n=n;el.dataset.i=i;
+    el.onclick=()=>{
+      if(el.classList.contains('used'))return;
+      const si=S.c10slots.findIndex(v=>v===null);if(si<0)return;
+      S.c10slots[si]=n; el.classList.add('used');
+      const slot=document.querySelector(`.ec-sort-slot[data-i="${si}"]`);
+      slot.textContent=n; slot.classList.add('filled');
+    };
+    items.appendChild(el);
+  });
+}
+function chkC10(){
+  if(S.c10slots.includes(null)){setStatus('warn','すべて選んでください');return;}
+  if(S.c10slots.every((v,i)=>v===S.c10answer[i]))goNext();else fail('並び順が違います');
+}
+
+/* ════════════════════════════════════════
+   C11 — REACTION (click when red)
+════════════════════════════════════════ */
+function killReact(){clearTimeout(S.c11t);clearTimeout(S.c11ft);}
+function drawReactState(color,label){
+  const cv=document.getElementById('c11-cv'); cv.width=cv.clientWidth||460; const W=cv.width,H=88;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H); ctx.fillStyle=color; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.font='bold 14px IBM Plex Mono,monospace'; ctx.textAlign='center';
+  ctx.fillText(label,W/2,H/2+5);
+}
+function initC11(){
+  S.c11red=false; S.c11done=false; killReact();
+  const box=document.getElementById('c11-box'); box.style.cursor='pointer';
+  drawReactState('#f5f2ed','');
+  document.getElementById('c11-hint').textContent='待機中...';
+  // fakes then real
+  const fakes=~~(Math.random()*3)+1;
+  let delay=600+~~(Math.random()*1400);
+  for(let f=0;f<fakes;f++){
+    const fd=delay;
+    setTimeout(()=>{
+      if(S.c11done)return;
+      drawReactState('rgba(214,48,49,0.15)','');
+      setTimeout(()=>{if(!S.c11done)drawReactState('#f5f2ed','');},120);
+    },fd);
+    delay+=600+~~(Math.random()*1400);
+  }
+  S.c11t=setTimeout(()=>{
+    if(S.c11done)return;
+    S.c11red=true;
+    drawReactState('#d63031','CLICK NOW');
+    document.getElementById('c11-hint').textContent='今すぐクリック！';
+  },delay);
+}
+function reactClick(){
+  if(S.c11done)return; S.c11done=true; killReact();
+  if(S.c11red)goNext();else fail('早すぎ — 赤くなってからクリックしてください');
+}
+
+/* ════════════════════════════════════════
+   C12 — BINARY TO DECIMAL
+════════════════════════════════════════ */
+function initC12(){
+  const n=1+~~(Math.random()*127);
+  S.c12answer=n;
+  const bin=n.toString(2).padStart(7,'0');
+  document.getElementById('c12-bin').textContent=bin;
+  const opts=new Set([n]); while(opts.size<8)opts.add(1+~~(Math.random()*127));
+  const arr=[...opts].sort(()=>Math.random()-0.5);
+  const cont=document.getElementById('c12-opts'); cont.innerHTML='';
+  arr.forEach(v=>{
+    const b=document.createElement('button'); b.className='ec-bin-btn'; b.textContent=v;
+    b.onclick=()=>{if(v===S.c12answer)goNext();else fail(`不正解 / 正解: ${S.c12answer}`);};
+    cont.appendChild(b);
+  });
+}
+</script>
+
+<!-- ═══════════════════════════════════════════ DOCS PAGE ═══ -->
+<div id="docs-page">
+  <div class="docs-hero">
+    <div class="docs-hero-tag">DOCUMENTATION v3.0</div>
+    <h1>WT*Rca™</h1>
+    <p>What The F*** Recaptcha — 人間確認プロトコル</p>
+  </div>
+  <div class="docs-body">
+
+    <div class="docs-section">
+      <h2>What is WT*Rca?</h2>
+      <p>WT*Rca は、普通のウェブサイトに埋め込み可能な <strong>理不尽レベルの CAPTCHA ウィジェット</strong>です。チェックボックスをクリックすると全12問のチャレンジが出題され、1問でもミスすると最初からやり直しになります。</p>
+      <div class="docs-badge-row">
+        <span class="docs-badge green">依存ゼロ</span>
+        <span class="docs-badge green">単一ファイル</span>
+        <span class="docs-badge">Canvas描画</span>
+        <span class="docs-badge">モバイル対応</span>
+        <span class="docs-badge">全12問ランダム</span>
+      </div>
+    </div>
+
+    <div class="docs-section">
+      <h2>埋め込み手順</h2>
+      <div class="docs-steps">
+        <div class="docs-step">
+          <div class="docs-step-num">1</div>
+          <div class="docs-step-text"><strong>HTMLに &lt;link&gt; を追加</strong> — Google Fonts (DM Sans + IBM Plex Mono) を読み込みます</div>
+        </div>
+        <div class="docs-step">
+          <div class="docs-step-num">2</div>
+          <div class="docs-step-text"><strong>CSSを &lt;style&gt; に貼り付け</strong> — <code style="font-family:var(--mono);font-size:12px;background:var(--paper);padding:2px 6px;border-radius:2px;">.ecw-*</code> と <code style="font-family:var(--mono);font-size:12px;background:var(--paper);padding:2px 6px;border-radius:2px;">.ec-*</code> と <code style="font-family:var(--mono);font-size:12px;background:var(--paper);padding:2px 6px;border-radius:2px;">.eco / .ecm</code> クラス群</div>
+        </div>
+        <div class="docs-step">
+          <div class="docs-step-num">3</div>
+          <div class="docs-step-text"><strong>ウィジェット HTML を &lt;form&gt; 内に配置</strong> — 下記のウィジェットブロックをコピー</div>
+        </div>
+        <div class="docs-step">
+          <div class="docs-step-num">4</div>
+          <div class="docs-step-text"><strong>モーダル HTML を &lt;body&gt; 末尾に配置</strong> — オーバーレイとモーダル本体</div>
+        </div>
+        <div class="docs-step">
+          <div class="docs-step-num">5</div>
+          <div class="docs-step-text"><strong>JS を &lt;script&gt; に貼り付け</strong> — <code style="font-family:var(--mono);font-size:12px;background:var(--paper);padding:2px 6px;border-radius:2px;">ecOpen()</code> / <code style="font-family:var(--mono);font-size:12px;background:var(--paper);padding:2px 6px;border-radius:2px;">onVerified()</code> をカスタマイズ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="docs-section">
+      <h2>ウィジェット HTML スニペット</h2>
+      <div class="docs-code-wrap">
+        <div class="docs-code-label">HTML — フォーム内に貼り付け</div>
+        <div class="docs-code"><span class="cmt">&lt;!-- WT*Rca Widget --&gt;</span>
+<span class="kw">&lt;div</span> <span class="str">class</span>=<span class="str">"ecw"</span> <span class="str">id</span>=<span class="str">"ecap-widget"</span> <span class="str">onclick</span>=<span class="str">"ecOpen()"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;div</span> <span class="str">class</span>=<span class="str">"ecw-box"</span> <span class="str">id</span>=<span class="str">"ecw-box"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;div</span> <span class="str">class</span>=<span class="str">"spin"</span><span class="kw">&gt;&lt;/div&gt;</span>
+    <span class="kw">&lt;svg</span> <span class="str">width</span>=<span class="str">"13"</span> <span class="str">height</span>=<span class="str">"11"</span> <span class="str">viewBox</span>=<span class="str">"0 0 13 11"</span> <span class="str">fill</span>=<span class="str">"none"</span><span class="kw">&gt;</span>
+      <span class="kw">&lt;polyline</span> <span class="str">points</span>=<span class="str">"1,5.5 5,9.5 12,1"</span> <span class="str">stroke</span>=<span class="str">"#00b894"</span>
+        <span class="str">stroke-width</span>=<span class="str">"2.2"</span> <span class="str">stroke-linecap</span>=<span class="str">"round"</span><span class="kw">/&gt;</span>
+    <span class="kw">&lt;/svg&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> <span class="str">class</span>=<span class="str">"ecw-text"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;div</span> <span class="str">class</span>=<span class="str">"main"</span> <span class="str">id</span>=<span class="str">"ecw-label"</span><span class="kw">&gt;</span>私はロボットではありません<span class="kw">&lt;/div&gt;</span>
+    <span class="kw">&lt;div</span> <span class="str">class</span>=<span class="str">"sub2"</span> <span class="str">id</span>=<span class="str">"ecw-sub"</span><span class="kw">&gt;</span>WT*Rca v3.0<span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+<span class="kw">&lt;/div&gt;</span></div>
+      </div>
+    </div>
+
+    <div class="docs-section">
+      <h2>コールバックのカスタマイズ</h2>
+      <div class="docs-code-wrap">
+        <div class="docs-code-label">JavaScript</div>
+        <div class="docs-code"><span class="cmt">// 認証成功時に呼ばれる関数をカスタマイズ</span>
+<span class="kw">function</span> <span class="fn">onVerified</span>() {
+  <span class="cmt">// ウィジェットをチェック済み状態にする</span>
+  <span class="kw">const</span> w = document.<span class="fn">getElementById</span>(<span class="str">'ecap-widget'</span>);
+  w.<span class="fn">classList.add</span>(<span class="str">'ok'</span>);
+
+  <span class="cmt">// ここに任意の処理を追加</span>
+  document.<span class="fn">getElementById</span>(<span class="str">'submit-btn'</span>).disabled = <span class="kw">false</span>;
+
+  <span class="cmt">// またはフォームを直接送信</span>
+  <span class="cmt">// document.getElementById('my-form').submit();</span>
+}
+
+<span class="cmt">// 手動でウィジェットをリセットする場合</span>
+<span class="kw">function</span> <span class="fn">ecReset</span>() {
+  S.verified = <span class="kw">false</span>;
+  document.<span class="fn">getElementById</span>(<span class="str">'ecap-widget'</span>).<span class="fn">classList.remove</span>(<span class="str">'ok'</span>);
+  document.<span class="fn">getElementById</span>(<span class="str">'ecw-label'</span>).textContent = <span class="str">'私はロボットではありません'</span>;
+}</div>
+      </div>
+    </div>
+
+    <div class="docs-section">
+      <h2>チャレンジ一覧</h2>
+      <div class="docs-api">
+        <div class="docs-api-row"><div class="docs-api-key">01 歪み文字認識</div><div class="docs-api-val">Canvas描画の歪み文字。クリック再生成で-2秒ペナルティ。波形変換済みでコピー不可</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">02 図形グリッド</div><div class="docs-api-val">4×4グリッドから指定図形をすべて選択。Canvas描画のため選択不可</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">03 精密スライダー</div><div class="docs-api-val">幅7%のゾーンにスライダーを合わせる</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">04 逆順記憶</div><div class="docs-api-val">7桁の数列を3秒記憶→Canvasをblur+ピクセル化→元データを消去→逆順入力</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">05 数式計算</div><div class="docs-api-val">(a×b)-(c×d)+⌊√(a×b)⌋ を12秒で計算</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">06 ストループ効果</div><div class="docs-api-val">色名と文字色が矛盾。脳の誤反応を誘発</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">07 ダイヤル回転</div><div class="docs-api-val">ドラッグで指定角度±13°に赤点を合わせる</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">08 モールス解読</div><div class="docs-api-val">2桁の数字のモールス信号を解読して選択</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">09 座標クリック</div><div class="docs-api-val">散布図上の赤い×をクリック (許容±16px)</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">10 数字ソート</div><div class="docs-api-val">5つのランダム数字を小さい順に並べる</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">11 リアクション</div><div class="docs-api-val">フェイクあり。Canvasが赤くなった瞬間にクリック</div></div>
+        <div class="docs-api-row"><div class="docs-api-key">12 2進数変換</div><div class="docs-api-val">7ビット2進数を10進数に変換して8択から選ぶ</div></div>
+      </div>
+    </div>
+
+    <div class="docs-section">
+      <h2>注意事項</h2>
+      <p>WT*Rca™ はジョーク・デモ用プロジェクトです。実際のプロダクションには使用しないでください。本物のセキュリティが必要な場合は適切な認証システムを導入してください。</p>
+      <p style="font-family:var(--mono);font-size:10px;color:var(--dim);">依存ゼロ / バニラJS / Canvas API / MIT-ish License</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
