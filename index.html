@@ -261,7 +261,7 @@ body{font-family:var(--sans);background:var(--paper);min-height:100vh;display:fl
   </div>
   <div class="field">
     <label>パスワード</label>
-    <input type="password" id="pw-inp" value="wt_rca_demo_2026!" readonly>
+    <input type="password" id="pw-inp" value="wt_rca_demo_2024!" readonly>
     <div class="field-hint">PASSWORD IS PRE-FILLED — READ ONLY</div>
   </div>
   <div class="ecw" id="ecw" onclick="ecOpen()">
@@ -821,10 +821,10 @@ const S={
   c1text:'',
   c2correct:[],
   c3val:0,c3target:{},c3drag:false,
-  c4seq:null,c4answer:[],c4entered:[],
+  c4seq:null,c4answer:[],c4entered:[],c4t:null,
   c5answer:0,
   c6correct:-1,c6sel:-1,
-  c7angle:0,c7target:{},c7drag:false,
+  c7angle:0,c7target:{},c7drag:false,c7cleanup:null,
   c8answer:'',
   c9target:{},c9click:null,
   c10answer:[],c10slots:[],
@@ -833,7 +833,7 @@ const S={
   c13correct:-1,c13sel:-1,
   c14correct:-1,c14sel:-1,c14p:null,
   c15answer:0,
-  c16pattern:[],c16input:[],c16phase:'show',
+  c16pattern:[],c16input:[],c16phase:'show',c16t:null,
   c17target:0,c17count:0,
   c18seq:[],c18input:[],c18phase:'show',
   c19answer:'',
@@ -849,10 +849,11 @@ const S={
   c29target:0,c29count:0,c29over:false,
   c30target:0,c30startTime:0,c30started:false,
   c31answer:0,
-  c32nums:null,c32answer:[],c32slots:[],
+  c32nums:null,c32answer:[],c32slots:[],c32phase:'show',c32t:null,
   c33answer:'',
   c34aval:0,c34atarget:{},c34adrag:false,c34bval:0,c34btarget:{},c34bdrag:false,c34cval:0,c34ctarget:{},c34cdrag:false,
-  c35targets:[],c35clicked:0,c35total:0,c35int:null,
+  c35targets:[],c35clicked:0,c35total:0,c35int:null,c35spawnTimers:[],
+  c27timers:[],
 };
 const ALL=Array.from({length:35},(_,i)=>i+1);
 const TIMERS={1:12,2:20,3:9,4:22,5:14,6:7,7:12,8:15,9:13,10:18,11:10,12:12,13:10,14:15,15:18,16:35,17:15,18:25,19:20,20:15,21:12,22:15,23:20,24:15,25:20,26:15,27:18,28:12,29:12,30:20,31:12,32:25,33:25,34:14,35:20};
@@ -867,7 +868,14 @@ function ecOpen(){
   document.getElementById('ecw').classList.add('loading');
   setTimeout(()=>{document.getElementById('ecw').classList.remove('loading');goNext();},500);
 }
-function ecClose(){stopTimer();killReact();clearC35();document.getElementById('eco').classList.remove('open');}
+function cleanupAll(){
+  stopTimer();killReact();clearC35();clearC27();
+  if(S.c7cleanup)S.c7cleanup();
+  if(S.c4t){clearTimeout(S.c4t);S.c4t=null;}
+  if(S.c16t){clearTimeout(S.c16t);S.c16t=null;}
+  if(S.c32t){clearTimeout(S.c32t);S.c32t=null;}
+}
+function ecClose(){cleanupAll();document.getElementById('eco').classList.remove('open');}
 function buildDots(){
   const c=document.getElementById('ecm-dots');c.innerHTML='';
   for(let i=0;i<S.total;i++){const d=document.createElement('div');d.className='dot';d.id='d'+i;c.appendChild(d);}
@@ -894,7 +902,7 @@ function goNext(){
   startTimer(n);
 }
 function fail(msg){
-  stopTimer();killReact();clearC35();setStatus('err','✗ '+msg);
+  cleanupAll();setStatus('err','✗ '+msg);
   setTimeout(()=>{S.current=0;S.order=[...ALL].sort(()=>Math.random()-0.5);buildDots();goNext();},1800);
 }
 function onVerified(){
@@ -1021,7 +1029,7 @@ function chkC3(){if(S.c3val>=S.c3target.min&&S.c3val<=S.c3target.max)goNext();el
 // ══ C4 REVERSE SEQUENCE ══
 function initC4(){
   const seq=Array.from({length:7},()=>~~(Math.random()*10));S.c4answer=[...seq].reverse();S.c4entered=[];S.c4seq=seq;
-  document.getElementById('c4-entered').textContent='—';drawSeq4(false);setTimeout(()=>drawSeq4(true),3000);
+  document.getElementById('c4-entered').textContent='—';drawSeq4(false);S.c4t=setTimeout(()=>drawSeq4(true),3000);
   const kp=document.getElementById('c4-keys');kp.innerHTML='';
   for(let n=0;n<=9;n++){const b=document.createElement('button');b.className='ec-key';b.textContent=n;b.onclick=()=>{if(S.c4entered.length>=S.c4answer.length)return;S.c4entered.push(n);updSeq4();if(S.c4entered.length===S.c4answer.length)chkC4();};kp.appendChild(b);}
   const bk=document.createElement('button');bk.className='ec-key';bk.textContent='⌫';bk.style.color='var(--accent)';bk.onclick=()=>{S.c4entered.pop();updSeq4();};kp.appendChild(bk);
@@ -1070,8 +1078,15 @@ function initC7(){
   document.getElementById('c7-target-label').textContent=`目標: ${tgt}° ± 12°`;updDial();
   const dial=document.getElementById('c7-dial');let last=null;
   const ga=e=>{const r=dial.getBoundingClientRect();const cx=(e.touches?e.touches[0].clientX:e.clientX)-(r.left+r.width/2);const cy=(e.touches?e.touches[0].clientY:e.clientY)-(r.top+r.height/2);return(Math.atan2(cy,cx)*180/Math.PI+90+360)%360;};
-  dial.onmousedown=e=>{S.c7drag=true;last=ga(e);};document.onmousemove=e=>{if(!S.c7drag)return;const a=ga(e);S.c7angle=(S.c7angle+(a-last)+360)%360;last=a;updDial();};document.onmouseup=()=>{S.c7drag=false;};
-  dial.ontouchstart=e=>{S.c7drag=true;last=ga(e);e.preventDefault();};document.ontouchmove=e=>{if(!S.c7drag)return;const a=ga(e);S.c7angle=(S.c7angle+(a-last)+360)%360;last=a;updDial();e.preventDefault();};document.ontouchend=()=>{S.c7drag=false;};
+  const onMM=e=>{if(!S.c7drag)return;const a=ga(e);S.c7angle=(S.c7angle+(a-last)+360)%360;last=a;updDial();};
+  const onMU=()=>{S.c7drag=false;};
+  const onTM=e=>{if(!S.c7drag)return;const a=ga(e);S.c7angle=(S.c7angle+(a-last)+360)%360;last=a;updDial();e.preventDefault();};
+  const onTE=()=>{S.c7drag=false;};
+  document.addEventListener('mousemove',onMM);document.addEventListener('mouseup',onMU);
+  document.addEventListener('touchmove',onTM,{passive:false});document.addEventListener('touchend',onTE);
+  S.c7cleanup=()=>{document.removeEventListener('mousemove',onMM);document.removeEventListener('mouseup',onMU);document.removeEventListener('touchmove',onTM);document.removeEventListener('touchend',onTE);S.c7cleanup=null;};
+  dial.onmousedown=e=>{S.c7drag=true;last=ga(e);};
+  dial.ontouchstart=e=>{S.c7drag=true;last=ga(e);e.preventDefault();};
 }
 function updDial(){const a=S.c7angle,rad=(a-90)*Math.PI/180,r=54;const h=document.getElementById('c7-handle');h.style.left=(50+r*Math.cos(rad))+'%';h.style.top=(50+r*Math.sin(rad))+'%';h.style.transform='translate(-50%,-50%)';document.getElementById('c7-hint').textContent=`現在: ${Math.round(a)}°`;}
 function chkC7(){const a=S.c7angle,{min,max}=S.c7target;const ok=min<=max?a>=min&&a<=max:(a>=min||a<=max);if(ok)goNext();else fail('角度がずれています');}
@@ -1190,12 +1205,14 @@ function initC15(){
 
 // ══ C16 PATTERN MEMORY ══
 function initC16(){
+  if(S.c16t){clearTimeout(S.c16t);S.c16t=null;}
   const size=25;S.c16pattern=Array.from({length:size},()=>Math.random()>.55?1:0);S.c16input=Array(size).fill(0);S.c16phase='show';
   document.getElementById('c16-phase').textContent='3秒間記憶してください';
   document.getElementById('c16-btn').style.display='none';
   const g=document.getElementById('c16-grid');g.innerHTML='';
   S.c16pattern.forEach((v,i)=>{const c=document.createElement('div');c.className='ec-mem-cell '+(v?'on':'off');c.dataset.i=i;g.appendChild(c);});
-  setTimeout(()=>{
+  S.c16t=setTimeout(()=>{
+    S.c16t=null;if(S.c16phase!=='show')return;
     S.c16phase='input';document.getElementById('c16-phase').textContent='再現してください（クリックでオン/オフ）';
     document.getElementById('c16-btn').style.display='block';
     g.innerHTML='';S.c16input=Array(size).fill(0);
@@ -1369,28 +1386,32 @@ function initC26(){
 }
 
 // ══ C27 SHELL GAME ══
+function clearC27(){if(S.c27timers){S.c27timers.forEach(t=>clearTimeout(t));S.c27timers=[];}}
 function initC27(){
-  S.c27cards=[0,1,2];S.c27red=~~(Math.random()*3);S.c27phase='show';
+  clearC27();S.c27timers=[];S.c27phase='show';
+  S.c27cards=[0,1,2];S.c27red=~~(Math.random()*3);
   const cv=document.getElementById('c27-cv');cv.width=cv.clientWidth||460;const W=cv.width,H=160;
   drawShell(cv,S.c27cards,true,S.c27red);document.getElementById('c27-hint').textContent='赤いカードの位置を覚えてください';
   const btns=document.getElementById('c27-btns');btns.innerHTML='';
-  setTimeout(()=>{
-    // shuffle animation
-    const moves=6+~~(Math.random()*5);let delay=0;
-    for(let m=0;m<moves;m++){setTimeout(()=>{
-      const a=~~(Math.random()*3),b=(a+1+~~(Math.random()*2))%3;[S.c27cards[a],S.c27cards[b]]=[S.c27cards[b],S.c27cards[a]];
-      if(S.c27cards[a]===S.c27red)S.c27red=a;else if(S.c27cards[b]===S.c27red)S.c27red=b;
-      // track where red slot went after swap
-      const newRed=S.c27cards.indexOf(0); // card 0 is always the red card
+  const moves=6+~~(Math.random()*5);let delay=1500;
+  for(let m=0;m<moves;m++){
+    const mm=m;const td=setTimeout(()=>{
+      if(S.c27phase==='done')return;
+      const a=~~(Math.random()*3),b=(a+1+~~(Math.random()*2))%3;
+      [S.c27cards[a],S.c27cards[b]]=[S.c27cards[b],S.c27cards[a]];
+      const newRed=S.c27cards.indexOf(0);
       drawShell(cv,S.c27cards,false,newRed);
-      document.getElementById('c27-hint').textContent=`シャッフル中... ${m+1}/${moves}`;
-    },delay);delay+=350;}
-    setTimeout(()=>{
-      S.c27phase='choose';document.getElementById('c27-hint').textContent='赤いカードはどれ？';
-      const redPos=S.c27cards.indexOf(0);// card index 0 = red
-      for(let i=0;i<3;i++){const b=document.createElement('button');b.className='ec-btn';b.style.flex='1';b.textContent=`${i+1}番`;b.onclick=()=>{if(i===redPos)goNext();else fail('外れ！');};btns.appendChild(b);}
-    },delay+200);
-  },1500);
+      document.getElementById('c27-hint').textContent=`シャッフル中... ${mm+1}/${moves}`;
+    },delay);
+    S.c27timers.push(td);delay+=350;
+  }
+  const tf=setTimeout(()=>{
+    if(S.c27phase==='done')return;
+    S.c27phase='choose';document.getElementById('c27-hint').textContent='赤いカードはどれ？';
+    const redPos=S.c27cards.indexOf(0);
+    for(let i=0;i<3;i++){const ii=i;const b=document.createElement('button');b.className='ec-btn';b.style.flex='1';b.textContent=`${ii+1}番`;b.onclick=()=>{if(S.c27phase!=='choose')return;S.c27phase='done';if(ii===redPos)goNext();else fail('外れ！');};btns.appendChild(b);}
+  },delay+200);
+  S.c27timers.push(tf);
 }
 function drawShell(cv,cards,showColor,redSlot){
   const W=cv.width,H=160,ctx=cv.getContext('2d'),cw=100,ch=70,gap=(W-cw*3)/4;
@@ -1480,16 +1501,18 @@ function initC31(){
 
 // ══ C32 MEMORY SORT ══
 function initC32(){
+  if(S.c32t){clearTimeout(S.c32t);S.c32t=null;}
   const nums=Array.from({length:5},()=>1+~~(Math.random()*99)).sort(()=>Math.random()-0.5);
-  S.c32nums=nums;S.c32answer=[...nums].sort((a,b)=>a-b);S.c32slots=Array(5).fill(null);
+  S.c32nums=nums;S.c32answer=[...nums].sort((a,b)=>a-b);S.c32slots=Array(5).fill(null);S.c32phase='show';
   document.getElementById('c32-phase').textContent='3秒間記憶してください';document.getElementById('c32-btn').style.display='none';
   document.getElementById('c32-slots').innerHTML='';document.getElementById('c32-items').innerHTML='';
   const cv=document.getElementById('c32-cv');cv.width=cv.clientWidth||460;const W=cv.width,H=68;
   const ctx=cv.getContext('2d');ctx.fillStyle='#f5f2ed';ctx.fillRect(0,0,W,H);
   ctx.font='bold 24px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#1a1825';
   const step=W/(nums.length+1);nums.forEach((n,i)=>ctx.fillText(n,(i+1)*step,H/2));
-  setTimeout(()=>{
-    // blur and erase
+  S.c32t=setTimeout(()=>{
+    S.c32t=null;if(S.c32phase!=='show')return;
+    S.c32phase='sort';
     const off=document.createElement('canvas');off.width=W;off.height=H;const oc=off.getContext('2d');oc.fillStyle='#f5f2ed';oc.fillRect(0,0,W,H);oc.save();oc.filter='blur(9px)';oc.font='bold 24px IBM Plex Mono,monospace';oc.textAlign='center';oc.textBaseline='middle';oc.fillStyle='rgba(0,0,0,.55)';nums.forEach((n,i)=>oc.fillText(n,(i+1)*step,H/2));oc.restore();ctx.putImageData(oc.getImageData(0,0,W,H),0,0);for(let i=0;i<600;i++){ctx.fillStyle=`rgba(245,242,237,${.3+Math.random()*.5})`;ctx.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*3,1+Math.random()*3);}S.c32nums=null;
     document.getElementById('c32-phase').textContent='昇順に並べてください';document.getElementById('c32-btn').style.display='block';
     const sl=document.getElementById('c32-slots');for(let i=0;i<5;i++){const s=document.createElement('div');s.className='ec-sort-slot';s.dataset.i=i;s.textContent=i+1;sl.appendChild(s);}
@@ -1528,33 +1551,64 @@ function chkC34(){
 }
 
 // ══ C35 MOVING TARGETS ══
-function clearC35(){clearInterval(S.c35int);S.c35int=null;}
+function clearC35(){
+  if(S.c35int){cancelAnimationFrame(S.c35int);S.c35int=null;}
+  // cancel pending spawn timers
+  if(S.c35spawnTimers){S.c35spawnTimers.forEach(t=>clearTimeout(t));S.c35spawnTimers=[];}
+}
 function initC35(){
-  clearC35();const cv=document.getElementById('c35-cv');cv.width=cv.clientWidth||460;const W=cv.width,H=220;
-  const ctx=cv.getContext('2d');ctx.fillStyle='#f5f2ed';ctx.fillRect(0,0,W,H);
+  clearC35();
+  const cv=document.getElementById('c35-cv');
+  // set width ONCE here, never inside the loop
+  cv.width=cv.clientWidth||460;
+  const W=cv.width,H=220;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#f5f2ed';ctx.fillRect(0,0,W,H);
   const totalT=6+~~(Math.random()*4);S.c35total=totalT;S.c35clicked=0;S.c35targets=[];
-  document.getElementById('c35-remain').textContent=`残り ${totalT - S.c35clicked} / ${totalT}`;
-  // spawn targets with random appearance times
+  S.c35spawnTimers=[];
+  document.getElementById('c35-remain').textContent=`残り ${totalT} / ${totalT}`;
+
   let spawned=0;
   const spawn=()=>{
-    if(spawned>=totalT)return;spawned++;
-    const r=22;const tx=r+Math.random()*(W-r*2),ty=r+Math.random()*(H-r*2);
+    if(spawned>=totalT||!S.c35int)return;spawned++;
+    const r=22,tx=r+Math.random()*(W-r*2),ty=r+Math.random()*(H-r*2);
     const vx=(Math.random()-.5)*1.8,vy=(Math.random()-.5)*1.8;
-    const tObj={x:tx,y:ty,vx,vy,r,alive:true,id:spawned-1};S.c35targets.push(tObj);
-    setTimeout(spawn,400+~~(Math.random()*800));
+    S.c35targets.push({x:tx,y:ty,vx,vy,r,alive:true});
+    if(spawned<totalT){const tid=setTimeout(spawn,400+~~(Math.random()*800));S.c35spawnTimers.push(tid);}
   };spawn();
+
   cv.onclick=e=>{
-    const rect=cv.getBoundingClientRect();const mx=(e.clientX-rect.left)*(W/rect.width),my=(e.clientY-rect.top)*(H/rect.height);
-    S.c35targets.forEach(t=>{if(!t.alive)return;const dx=mx-t.x,dy=my-t.y;if(Math.sqrt(dx*dx+dy*dy)<=t.r){t.alive=false;S.c35clicked++;document.getElementById('c35-remain').textContent=`残り ${totalT-S.c35clicked} / ${totalT}`;if(S.c35clicked===totalT){clearC35();goNext();}}});
-  };
-  S.c35int=setInterval(()=>{
-    cv.width=cv.clientWidth||460;const W2=cv.width;ctx.fillStyle='#f5f2ed';ctx.fillRect(0,0,W2,H);
+    if(!S.c35int)return;
+    const rect=cv.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width),my=(e.clientY-rect.top)*(H/rect.height);
     S.c35targets.forEach(t=>{
-      if(!t.alive)return;t.x+=t.vx;t.y+=t.vy;if(t.x<t.r||t.x>W2-t.r)t.vx*=-1;if(t.y<t.r||t.y>H-t.r)t.vy*=-1;
-      ctx.beginPath();ctx.arc(t.x,t.y,t.r,0,Math.PI*2);ctx.fillStyle='var(--accent)';ctx.fill();
+      if(!t.alive)return;
+      const dx=mx-t.x,dy=my-t.y;
+      if(Math.sqrt(dx*dx+dy*dy)<=t.r){
+        t.alive=false;S.c35clicked++;
+        document.getElementById('c35-remain').textContent=`残り ${totalT-S.c35clicked} / ${totalT}`;
+        if(S.c35clicked===totalT){clearC35();goNext();}
+      }
+    });
+  };
+
+  let lastTime=0;
+  const loop=(ts)=>{
+    if(!S.c35int)return; // stopped
+    S.c35int=requestAnimationFrame(loop);
+    // throttle to ~60fps but skip frame if tab hidden
+    if(ts-lastTime<14){return;}lastTime=ts;
+    ctx.fillStyle='#f5f2ed';ctx.fillRect(0,0,W,H);
+    S.c35targets.forEach(t=>{
+      if(!t.alive)return;
+      t.x+=t.vx;t.y+=t.vy;
+      if(t.x<t.r||t.x>W-t.r)t.vx*=-1;
+      if(t.y<t.r||t.y>H-t.r)t.vy*=-1;
+      ctx.beginPath();ctx.arc(t.x,t.y,t.r,0,Math.PI*2);ctx.fillStyle='#d63031';ctx.fill();
       ctx.fillStyle='white';ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('!',t.x,t.y);
     });
-  },16);
+  };
+  S.c35int=requestAnimationFrame(loop); // seed with a truthy value first
 }
 
 // ══ DOCS TABS ══
