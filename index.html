@@ -1103,7 +1103,275 @@ body{font-family:var(--sans);background:var(--paper);min-height:100vh;display:fl
 
 <span class="cmt">&lt;!-- モーダルを body 末尾に配置（全チャレンジHTMLを含む） --&gt;</span>
 <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"eco"</span> <span class="at">id</span>=<span class="str">"eco"</span><span class="kw">&gt;</span>
-  <span class="cmt">&lt;!-- 配布ファイルの .ecm ブロック全体をコピー --&gt;</span>
+  <div class="ecm">
+    <div class="ecm-head">
+      <div class="ecm-title">
+        <h3>WHAT THE F*** RECAPTCHA PROTOCOL</h3>
+        <p id="ecm-name">—</p>
+      </div>
+      <div class="ecm-meta">
+        <div class="ecm-timer" id="ecm-timer">—</div>
+        <button class="ecm-close" onclick="ecClose()">✕</button>
+      </div>
+    </div>
+    <div class="ecm-dots" id="ecm-dots"></div>
+    <div class="ecm-body">
+      <div class="ec-status" id="ec-status"></div>
+
+      <div class="ec-ch" id="ec1">
+        <div class="ec-q">歪んだ文字を読んで入力してください。<br><small style="color:var(--dim)">クリックで再生成 / −2秒ペナルティ</small></div>
+        <canvas class="ec-canvas" id="c1-cv" height="90" style="cursor:pointer;margin-bottom:5px;"></canvas>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-align:right;margin-bottom:10px;">CLICK TO REFRESH (–2s)</div>
+        <input class="ec-in" id="c1-in" placeholder="入力..." maxlength="8" autocomplete="off" spellcheck="false">
+        <button class="ec-btn" onclick="chkC1()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec2">
+        <div class="ec-q" id="c2-q"></div>
+        <div class="ec-grid" id="c2-grid" style="grid-template-columns:repeat(6,1fr)"></div>
+        <button class="ec-btn" onclick="chkC2()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec3">
+        <div class="ec-q">スライダーを<strong>黄色のゾーン</strong>に合わせてください。<small style="color:var(--dim)"> ゾーン幅5%</small></div>
+        <div class="ec-track" id="c3-track"><div class="ec-track-fill" id="c3-fill"></div><div class="ec-zone" id="c3-zone"></div><div class="ec-thumb" id="c3-thumb"></div></div>
+        <div class="ec-track-label">ドラッグ or クリック</div>
+        <button class="ec-btn" onclick="chkC3()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec4">
+        <div class="ec-q">数列を<strong>逆順</strong>で入力してください。<small style="color:var(--dim)"> 3秒で消えます</small></div>
+        <canvas class="ec-seq-canvas" id="c4-cv" height="68"></canvas>
+        <div class="ec-seq-prog">入力: <span id="c4-entered">—</span></div>
+        <div class="ec-keypad" id="c4-keys"></div>
+      </div>
+
+      <div class="ec-ch" id="ec5">
+        <div class="ec-q">計算結果を入力してください。</div>
+        <div class="ec-math" id="c5-math"></div>
+        <input class="ec-in" type="number" id="c5-in" placeholder="答え..." style="letter-spacing:2px;">
+        <button class="ec-btn" onclick="chkC5()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec6">
+        <div class="ec-q">文字が示す<strong>色名</strong>と一致する色を選んでください。<small style="color:var(--dim)">（ストループ効果）</small></div>
+        <div class="ec-stroop-word" id="c6-word"></div>
+        <div class="ec-color-row" id="c6-swatches"></div>
+        <button class="ec-btn" onclick="chkC6()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec7">
+        <div class="ec-q">赤い点を指定の角度に回してください。</div>
+        <div class="ec-dial-target" id="c7-target-label"></div>
+        <div class="ec-dial-wrap"><div class="ec-dial" id="c7-dial"><div class="ec-dial-handle" id="c7-handle"></div><div class="ec-dial-center"></div></div></div>
+        <div class="ec-dial-hint" id="c7-hint">0°</div>
+        <button class="ec-btn" onclick="chkC7()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec8">
+        <div class="ec-q">モールス信号を解読して数字を選んでください。</div>
+        <div class="ec-morse" id="c8-morse"></div>
+        <div class="ec-morse-grid" id="c8-opts"></div>
+      </div>
+
+      <div class="ec-ch" id="ec9">
+        <div class="ec-q">グラフ上の<strong>赤い × 印</strong>をクリックしてください。<small style="color:var(--dim)"> ±12px</small></div>
+        <canvas id="c9-cv" style="display:block;width:100%;height:200px;background:var(--paper);border:1px solid var(--mid);border-radius:2px;margin-bottom:8px;cursor:crosshair;" width="480" height="200"></canvas>
+        <div class="ec-coord-hint" id="c9-hint">キャンバスをクリック</div>
+        <button class="ec-btn" onclick="chkC9()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec10">
+        <div class="ec-q">数字を<strong>小さい順</strong>にタップして並べてください。</div>
+        <div class="ec-sort-slots" id="c10-slots"></div>
+        <div class="ec-sort-items" id="c10-items"></div>
+        <button class="ec-btn" onclick="chkC10()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec11">
+        <div class="ec-q">四角が<strong>赤くなったら</strong>すぐクリック！<small style="color:var(--dim)"> フェイクあり</small></div>
+        <div class="ec-react-box" id="c11-box" onclick="reactClick()"><canvas id="c11-cv" width="460" height="118"></canvas></div>
+        <div class="ec-react-hint" id="c11-hint">待機中...</div>
+      </div>
+
+      <div class="ec-ch" id="ec12">
+        <div class="ec-q">2進数を10進数に変換してください。</div>
+        <div class="ec-binary" id="c12-bin" style="font-family:var(--mono);font-size:22px;letter-spacing:4px;text-align:center;padding:14px;background:var(--paper);border:1px solid var(--mid);margin-bottom:12px;border-radius:2px;"></div>
+        <div class="ec-mc-opts" id="c12-opts" style="grid-template-columns:repeat(4,1fr);"></div>
+      </div>
+
+      <div class="ec-ch" id="ec13">
+        <div class="ec-q">HEXカラーコードに一致する色を選んでください。</div>
+        <div class="ec-hex-display" id="c13-hex"></div>
+        <div class="ec-hex-swatches" id="c13-swatches"></div>
+        <button class="ec-btn" onclick="chkC13()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec14">
+        <div class="ec-q">上の波形と<strong>同じパターン</strong>を選んでください。</div>
+        <canvas id="c14-target" style="display:block;width:100%;height:90px;border:1px solid var(--mid);background:var(--paper);border-radius:2px;margin-bottom:10px;" width="460" height="90"></canvas>
+        <div class="ec-wave-opts" id="c14-opts"></div>
+        <button class="ec-btn" id="c14-btn" onclick="chkC14()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec15">
+        <div class="ec-q" id="c15-q"></div>
+        <canvas id="c15-cv" style="display:block;width:100%;height:200px;border:1px solid var(--mid);background:var(--paper);border-radius:2px;margin-bottom:12px;" height="200"></canvas>
+        <div class="ec-mc-opts" id="c15-opts" style="grid-template-columns:repeat(4,1fr);"></div>
+      </div>
+
+      <div class="ec-ch" id="ec16">
+        <div class="ec-q">パターンを<strong>30秒間記憶</strong>して、消えたら同じパターンを再現してください。</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:8px;" id="c16-phase">記憶中...</div>
+        <div class="ec-mem-grid" id="c16-grid" style="grid-template-columns:repeat(5,1fr);max-width:250px;margin:0 auto 12px;"></div>
+        <button class="ec-btn" id="c16-btn" onclick="chkC16()" style="display:none;">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec17">
+        <div class="ec-q">目標回数だけ<strong>タップ</strong>してください。ぴったりで止めること！</div>
+        <div class="ec-tap-count" id="c17-count">0</div>
+        <div class="ec-tap-target" id="c17-target-label">目標: —</div>
+        <div class="ec-tap-box" id="c17-tap" onclick="tapIt(event)">TAP HERE</div>
+        <button class="ec-btn" onclick="chkC17()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec18">
+        <div class="ec-q">表示された色の順番を<strong>記憶</strong>して同じ順にボタンを押してください。</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:10px;" id="c18-phase">シーケンス再生中...</div>
+        <div class="ec-simon-grid" id="c18-grid"></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:center;margin-bottom:10px;">入力: <span id="c18-progress">—</span></div>
+      </div>
+
+      <div class="ec-ch" id="ec19">
+        <div class="ec-q">論理パズルを解いてください。</div>
+        <div class="ec-logic-box" id="c19-logic"></div>
+        <div class="ec-mc-opts" id="c19-opts" style="grid-template-columns:1fr 1fr;"></div>
+      </div>
+
+      <div class="ec-ch" id="ec20">
+        <div class="ec-q">記号混じりの文字列をタイプしてください。<small style="color:var(--dim)"> タイムアタック</small></div>
+        <div class="ec-type-display" id="c20-target"></div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center;margin-bottom:10px;">大文字小文字・記号すべて一致</div>
+        <input class="ec-in" id="c20-in" placeholder="タイプ..." autocomplete="off" spellcheck="false" style="letter-spacing:3px;">
+        <button class="ec-btn" onclick="chkC20()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec21">
+        <div class="ec-q"><strong>2本のスライダー</strong>を同時に指定ゾーンへ合わせてください。</div>
+        <div class="ec-track" id="c21a-track" style="margin-bottom:4px;"><div class="ec-track-fill" id="c21a-fill"></div><div class="ec-zone" id="c21a-zone"></div><div class="ec-thumb" id="c21a-thumb"></div></div>
+        <div class="ec-slider-label">スライダー A</div>
+        <div class="ec-track" id="c21b-track" style="margin-bottom:4px;"><div class="ec-track-fill" id="c21b-fill"></div><div class="ec-zone" id="c21b-zone"></div><div class="ec-thumb" id="c21b-thumb"></div></div>
+        <div class="ec-slider-label">スライダー B</div>
+        <button class="ec-btn" onclick="chkC21()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec22">
+        <div class="ec-q">数列の<strong>次の数</strong>を答えてください。</div>
+        <div class="ec-math" id="c22-seq"></div>
+        <div class="ec-mc-opts" id="c22-opts" style="grid-template-columns:repeat(4,1fr);"></div>
+      </div>
+
+      <div class="ec-ch" id="ec23">
+        <div class="ec-q">フラッシュしたパターンを順番通りに入力してください。<small style="color:var(--dim)"> 位置を覚える</small></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:8px;" id="c23-phase">準備中...</div>
+        <div class="ec-mem-grid" id="c23-grid" style="grid-template-columns:repeat(4,1fr);max-width:220px;margin:0 auto 12px;gap:4px;"></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:center;margin-bottom:10px;">入力順: <span id="c23-prog">—</span></div>
+      </div>
+
+      <div class="ec-ch" id="ec24">
+        <div class="ec-q">グラフの<strong>2つの × 印</strong>を順番に（赤→青）クリックしてください。<small style="color:var(--dim)"> ±14px</small></div>
+        <canvas id="c24-cv" style="display:block;width:100%;height:210px;background:var(--paper);border:1px solid var(--mid);border-radius:2px;margin-bottom:8px;cursor:crosshair;" width="480" height="210"></canvas>
+        <div class="ec-coord-hint" id="c24-hint">赤い × をクリックしてください</div>
+        <button class="ec-btn" onclick="chkC24()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec25">
+        <div class="ec-q">指定された時間（秒）を<strong>自分でカウント</strong>してボタンを押してください。<small style="color:var(--dim)"> ±0.8秒以内</small></div>
+        <div class="ec-type-display" id="c25-target-label" style="font-size:42px;letter-spacing:0;"></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;margin-bottom:12px;">秒後にボタンを押す</div>
+        <button class="ec-btn" id="c25-btn" onclick="chkC25()">NOW</button>
+      </div>
+
+      <div class="ec-ch" id="ec26">
+        <div class="ec-q">繰り返しパターンの<strong>抜けている部分</strong>を答えてください。</div>
+        <div class="ec-logic-box" id="c26-pattern"></div>
+        <div class="ec-mc-opts" id="c26-opts" style="grid-template-columns:repeat(4,1fr);"></div>
+      </div>
+
+      <div class="ec-ch" id="ec27">
+        <div class="ec-q">3枚のカードをシャッフルします。<strong>赤いカード</strong>を追ってください。</div>
+        <div id="c27-arena" style="position:relative;height:160px;margin-bottom:10px;border:1px solid var(--mid);border-radius:2px;background:var(--paper);overflow:hidden;"></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;margin-bottom:10px;" id="c27-hint">シャッフル中...</div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;" id="c27-btns"></div>
+      </div>
+
+      <div class="ec-ch" id="ec28">
+        <div class="ec-q">鏡像（水平反転）を選んでください。</div>
+        <div id="c28-wrap" style="margin-bottom:12px;"></div>
+      </div>
+
+      <div class="ec-ch" id="ec29">
+        <div class="ec-q">指定回数だけ<strong>連打</strong>してください。ジャスト！<small style="color:var(--dim)"> 超えたら失敗</small></div>
+        <div class="ec-tap-count" id="c29-count">0</div>
+        <div class="ec-tap-target" id="c29-target-label">目標: —</div>
+        <div class="ec-tap-box" id="c29-tap" onclick="tapC29(event)">SPAM HERE</div>
+        <button class="ec-btn" onclick="chkC29()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec30">
+        <div class="ec-q">赤点が現れてから<strong>ちょうど指定秒後</strong>にクリック。<small style="color:var(--dim)"> ±0.6秒</small></div>
+        <div class="ec-react-box" id="c30-box" style="cursor:default;flex-direction:column;gap:8px;">
+          <canvas id="c30-cv" width="460" height="60"></canvas>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--dim);" id="c30-sub">—</div>
+        </div>
+        <div style="margin-top:8px;"><button class="ec-btn" id="c30-click-btn" onclick="chkC30()" disabled>CLICK NOW</button></div>
+      </div>
+
+      <div class="ec-ch" id="ec31">
+        <div class="ec-q">16進数を10進数に変換してください。</div>
+        <div class="ec-hex-display" id="c31-hex" style="font-size:30px;"></div>
+        <div class="ec-mc-opts" id="c31-opts" style="grid-template-columns:repeat(4,1fr);"></div>
+      </div>
+
+      <div class="ec-ch" id="ec32">
+        <div class="ec-q">表示された数字を<strong>3秒で覚えて</strong>から、昇順に並べてください。<small style="color:var(--dim)"> 消えたら並べる</small></div>
+        <canvas class="ec-seq-canvas" id="c32-cv" height="68" style="margin-bottom:10px;"></canvas>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:8px;" id="c32-phase">記憶中...</div>
+        <div class="ec-sort-slots" id="c32-slots"></div>
+        <div class="ec-sort-items" id="c32-items"></div>
+        <button class="ec-btn" id="c32-btn" onclick="chkC32()" style="display:none;">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec33">
+        <div class="ec-q">条件を読んで答えを選んでください。</div>
+        <div class="ec-logic-box" id="c33-logic"></div>
+        <div class="ec-mc-opts" id="c33-opts" style="grid-template-columns:1fr 1fr;"></div>
+      </div>
+
+      <div class="ec-ch" id="ec34">
+        <div class="ec-q"><strong>3本のスライダー</strong>を全部同時に指定ゾーンへ合わせてください。</div>
+        <div class="ec-track" id="c34a-track" style="margin-bottom:4px;"><div class="ec-track-fill" id="c34a-fill"></div><div class="ec-zone" id="c34a-zone"></div><div class="ec-thumb" id="c34a-thumb"></div></div>
+        <div class="ec-slider-label">スライダー A</div>
+        <div class="ec-track" id="c34b-track" style="margin-bottom:4px;"><div class="ec-track-fill" id="c34b-fill"></div><div class="ec-zone" id="c34b-zone"></div><div class="ec-thumb" id="c34b-thumb"></div></div>
+        <div class="ec-slider-label">スライダー B</div>
+        <div class="ec-track" id="c34c-track" style="margin-bottom:4px;"><div class="ec-track-fill" id="c34c-fill"></div><div class="ec-zone" id="c34c-zone"></div><div class="ec-thumb" id="c34c-thumb"></div></div>
+        <div class="ec-slider-label">スライダー C</div>
+        <button class="ec-btn" onclick="chkC34()">VERIFY</button>
+      </div>
+
+      <div class="ec-ch" id="ec35">
+        <div class="ec-q">ランダムな速さで流れる<strong>すべてのボタン</strong>を逃さずクリックしてください！<small style="color:var(--dim)"> 全部クリックで成功</small></div>
+        <canvas id="c35-cv" style="display:block;width:100%;height:220px;border:1px solid var(--mid);background:var(--paper);border-radius:2px;margin-bottom:8px;cursor:pointer;" height="220"></canvas>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:center;margin-bottom:10px;">残り: <span id="c35-remain">—</span></div>
+      </div>
+
+      <div class="ec-success" id="ec-success">
+        <div class="big-check"><svg width="28" height="22" viewBox="0 0 28 22" fill="none"><polyline points="2,11 10,19 26,2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>確認完了</h3>
+        <p>HUMAN_CONFIRMED // WT*Rca™ v4.0</p>
+      </div>
+    </div>
+  </div>
 <span class="kw">&lt;/div&gt;</span></div>
         </div>
       </div>
