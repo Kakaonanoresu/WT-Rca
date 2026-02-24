@@ -715,72 +715,7 @@ body{font-family:var(--sans);background:var(--paper);min-height:100vh;display:fl
     <!-- TAB: EMBED -->
     <div class="docs-tab" id="tab-embed">
       <div class="docs-section">
-        <h2>Step 1 — フォントの読み込み</h2>
-        <p>&lt;head&gt; 内に追加してください。</p>
-        <div class="docs-code-wrap">
-          <div class="docs-code-head"><div class="docs-code-lang">HTML</div><button class="docs-copy-btn" onclick="copyCode(this)">COPY</button></div>
-          <div class="docs-code"><span class="cmt">&lt;!-- Google Fonts: DM Sans + IBM Plex Mono --&gt;</span>
-<span class="kw">&lt;link</span> <span class="at">rel</span>=<span class="str">"preconnect"</span> <span class="at">href</span>=<span class="str">"https://fonts.googleapis.com"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;link</span> <span class="at">rel</span>=<span class="str">"preconnect"</span> <span class="at">href</span>=<span class="str">"https://fonts.gstatic.com"</span> <span class="at">crossorigin</span><span class="kw">&gt;</span>
-<span class="kw">&lt;link</span> <span class="at">href</span>=<span class="str">"https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap"</span> <span class="at">rel</span>=<span class="str">"stylesheet"</span><span class="kw">&gt;</span></div>
-        </div>
-      </div>
-      <div class="docs-section">
-        <h2>Step 2 — CSS の追加</h2>
-        <p>WT*Rca の CSS をすべて &lt;style&gt; タグ内に貼り付けてください。配布ファイルの <code style="font-family:var(--mono);font-size:12px;background:var(--paper);padding:2px 6px;border-radius:2px;">&lt;style&gt;...&lt;/style&gt;</code> ブロック全体をコピーします。</p>
-        <div class="docs-code-wrap">
-          <div class="docs-code-head"><div class="docs-code-lang">HTML (抜粋)</div><button class="docs-copy-btn" onclick="copyCode(this)">COPY</button></div>
-          <div class="docs-code"><span class="kw">&lt;style&gt;</span>
-<span class="cmt">  /* WT*Rca styles — 配布ファイルの全 CSS をここに */</span>
-  @import url(<span class="str">'https://fonts.googleapis.com/...'</span>);
-  :root { --ink: <span class="num">#1a1825</span>; --paper: <span class="num">#f5f2ed</span>; ... }
-  .ecw { ... }
-  .eco { ... }
-  .ecm { ... }
-  <span class="cmt">/* 以下省略 */</span>
-<span class="kw">&lt;/style&gt;</span></div>
-        </div>
-      </div>
-      <div class="docs-section">
-        <h2>Step 3 — ウィジェット HTML</h2>
-        <p>&lt;form&gt; の送信ボタン直前に配置してください。</p>
-        <div class="docs-code-wrap">
-          <div class="docs-code-head"><div class="docs-code-lang">HTML</div><button class="docs-copy-btn" onclick="copyCode(this)">COPY</button></div>
-          <div class="docs-code"><span class="cmt">&lt;!-- WT*Rca Widget --&gt;</span>
-<span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"ecw"</span> <span class="at">id</span>=<span class="str">"ecw"</span> <span class="at">onclick</span>=<span class="str">"ecOpen()"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"ecw-box"</span> <span class="at">id</span>=<span class="str">"ecw-box"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"spin"</span><span class="kw">&gt;&lt;/div&gt;</span>
-    <span class="kw">&lt;svg</span> <span class="at">width</span>=<span class="str">"13"</span> <span class="at">height</span>=<span class="str">"11"</span> <span class="at">viewBox</span>=<span class="str">"0 0 13 11"</span> <span class="at">fill</span>=<span class="str">"none"</span><span class="kw">&gt;</span>
-      <span class="kw">&lt;polyline</span> <span class="at">points</span>=<span class="str">"1,5.5 5,9.5 12,1"</span> <span class="at">stroke</span>=<span class="str">"#00b894"</span>
-        <span class="at">stroke-width</span>=<span class="str">"2.2"</span> <span class="at">stroke-linecap</span>=<span class="str">"round"</span><span class="kw">/&gt;</span>
-    <span class="kw">&lt;/svg&gt;</span>
-  <span class="kw">&lt;/div&gt;</span>
-  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"ecw-text"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"main"</span> <span class="at">id</span>=<span class="str">"ecw-label"</span><span class="kw">&gt;</span>私はロボットではありません<span class="kw">&lt;/div&gt;</span>
-    <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"sub2"</span> <span class="at">id</span>=<span class="str">"ecw-sub"</span><span class="kw">&gt;</span>WT*Rca v4.0<span class="kw">&lt;/div&gt;</span>
-  <span class="kw">&lt;/div&gt;</span>
-<span class="kw">&lt;/div&gt;</span>
-
-<span class="cmt">&lt;!-- モーダルを body 末尾に配置（全チャレンジHTMLを含む） --&gt;</span>
-<span class="kw">&lt;div</span> <span class="at">class</span>=<span class="str">"eco"</span> <span class="at">id</span>=<span class="str">"eco"</span><span class="kw">&gt;</span>
-  <span class="cmt">&lt;!-- 配布ファイルの .ecm ブロック全体をコピー --&gt;</span>
-<span class="kw">&lt;/div&gt;</span></div>
-        </div>
-      </div>
-      <div class="docs-section">
-        <h2>Step 4 — JavaScript の追加</h2>
-        <p>配布ファイルの &lt;script&gt; タグ内のコードを &lt;body&gt; 末尾に追加してください。</p>
-        <div class="docs-code-wrap">
-          <div class="docs-code-head"><div class="docs-code-lang">HTML</div><button class="docs-copy-btn" onclick="copyCode(this)">COPY</button></div>
-          <div class="docs-code"><span class="kw">&lt;script&gt;</span>
-<span class="cmt">  // WT*Rca JS — 配布ファイルの全 JS をここに貼り付け</span>
-  <span class="str">'use strict'</span>;
-  <span class="kw">const</span> S = { verified: <span class="kw">false</span>, current: <span class="num">0</span>, total: <span class="num">35</span>, ... };
-  <span class="kw">function</span> <span class="fn">ecOpen</span>() { ... }
-  <span class="kw">function</span> <span class="fn">onVerified</span>() { ... }
-  <span class="cmt">// 以下省略 — 配布ファイルをそのまま使用</span>
-<span class="kw">&lt;/script&gt;</span></div>
-        </div>
+      <span href="WT#Rca.html">これに全部埋め込むためのが入ってます</span>
       </div>
     </div>
 
